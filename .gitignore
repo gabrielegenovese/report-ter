@@ -12,6 +12,8 @@ main.aux
 main.fdb_latexmk
 main.fls
 main.out
+main.toc
+main.pdf
 semantics/paper.aux
 semantics/paper.bbl
 semantics/paper.blg
