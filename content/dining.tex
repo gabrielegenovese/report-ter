@@ -1,0 +1,131 @@
+\paragraph{Dining Philosophers Example}
+Let us consider a program with two participants playing the role of a
+dining philosopher who shares two forks with the other participant.
+
+\begin{lstlisting}
+philosopher(Fork1, Fork2) ->
+  send req to Fork1,
+  receive ack from Fork1,
+  send req to Fork2,
+  receive ack from Fork2,
+  eat(),
+  send release to Fork1,
+  send release to Fork2,
+  philosopher(Fork1, Fork2).
+
+fork() ->
+  receive req from Phil,
+  send ack to Phil,
+  receive release from Phil,
+  fork().
+\end{lstlisting}
+%
+% Consider the following 
+% %\footnote{The
+% %corresponding Erlang code can be found in our
+% %\href{https://github.com/gabrielegenovese/chorer/blob/example/deadlock/examples/paper_example/deadlock/deadlock.erl}{github}
+% %repository.} 
+% program, where each function defines the behavior of a
+% participant in the communicating system, which can be instantiated
+% multiple times.  The program models two dining philosophers.
+%
+
+%
+The behavior of the philosophers is given by the pseudocode on the
+right while pseudocode for the behavior of the forks is discussed below.
+Each philosopher first acquires the forks (starting with the one on
+its right, that is the one with the same index), then eats (with the
+function call \lstinline{eat()} representing some terminating local
+computation), and finally releases the forks before recurring.
+Parameters \lstinline{Fork1} and \lstinline{Fork2} are references to
+processes executing the behavior of forks described by the pseudocode on the left
+that repeatedly waits for the request from process \lstinline{Phil},
+\lstinline{ack}s the request, and waits for the \lstinline{release}
+message from \lstinline{Phil}.
+
+
+There are two possible behaviors of the system. The first (good) one where the philosophers alternate eating infinitely and a second (bad) behavior 
+%three
+%possible executions of the system. In the first one, the first
+%philosopher takes both forks, eats, then releases them,
+%allowing the second philosopher to do the same. In the second
+%execution, the philosophers eat in the opposite order. Given the recursive behavior of the \texttt{philosopher} 
+%function, the actors could alternate infinitely.
+%In the third possible execution, 
+where both philosophers
+manage to take only one fork each %, but they cannot take the other, as they
+%are waiting for the other philosopher to release it. This 
+resulting in a deadlock. 
+Figure~\ref{graph:philosophers} depicts the global Choreography Automaton
+representing the program above. 
+We have two recursive executions where both philosophers
+eat, represented as loops, and two executions which end in the same
+deadlock state.
+%\footnote{The full global view,
+%obtained with our prototype tool Chorer \cite{chorer}, can be seen in
+%our
+%\href{https://github.com/gabrielegenovese/chorer/blob/example/deadlock/examples/paper_example/deadlock/main_0_global_view.dot}
+  %   {github} repository.}.
+%
+%In the automaton, State 1 is the entry point. From State 1, we have
+%two possible transitions, to State 2 and State 3 respectively, which
+%model the requests (\texttt{req}) of the philosophers to the forks
+%with the corresponding index. The two transitions can occur in any
+%order (indeed there are transitions to State 5 closing the commuting
+%diamond).
+%
+%Transitioning from State 1 to State 2 means that the system first 
+%performs the \texttt{req} communication for the first philosopher. 
+%Transitioning from State 1 to State 3 means that it first performs 
+%the \texttt{req} communication for the second philosopher.
+%States 2 and 3 represent states where there is a race between the
+%philosopher that already has one fork taking the other (transitions on
+%the side, leading to a loop), or the other philosopher taking the
+%fork, leading to the deadlock in State 5. 
+The deadlock is 
+visible since State 5 is not final, and it has no outgoing transitions.
+%Also, the system has a race, this is visible in the choreography
+%automaton since State 3 has two outgoing transitions with the same
+%receiver (the same for State 2), but we want to see these transitions
+%since some of them lead to the deadlock state. 
+  The automaton is simplified %w.r.t.~a full model of the program, 
+  as it does not display the \texttt{ack} messages, and the
+  \texttt{release} messages are merged since their order is
+  irrelevant. The focus here is solely on the order of the
+  \texttt{req} messages. One can imagine to first extract the full
+  choreography automaton, and then merge equivalent behaviors and abstract away from uninteresting transitions.
+%  to focus on the ones of interest. 
+%  Another possible simplification
+%  would be to notice that the system is symmetric (w.r.t.~the swap of
+%  the two philosophers), hence it would be enough to analyze one of
+%  the two halves.
+
+
+
+\begin{figure}[t]
+  \centering
+  % \includegraphics[scale=.35]{images/deadlock.png}
+  % \makebox[\textwidth][c]{
+  \resizebox{0.9\textwidth}{!}{%
+      \begin{tikzpicture}[node distance={40mm}, thick, main/.style = {draw, circle}] 
+        \node[state] (n_1) {1};
+        \node[state] (n_2) [below right of=n_1] {2};
+        \node[state] (n_3) [below left of=n_1] {3};
+        \node[state] (n_4) [right of=n_2] {4};
+        \node[state] (n_5) [below of=n_1, fill=red] {5};
+        \node[state] (n_6) [left of=n_3] {6};
+        
+        \draw[->] (n_1) -- node[midway, right, pos=0.5] {philo0→fork0:req} (n_2);
+        \draw[->] (n_1) -- node[midway, left, pos=0.5] {philo1→fork1:req} (n_3);
+        \draw[->] (n_2) -- node[midway, below right, pos=0.5] {philo1→fork1:req} (n_5);
+        \draw[->] (n_3) -- node[midway, below left, pos=0.5] {philo0→fork0:req} (n_5);
+        \draw[->] (n_2) -- node[midway, above, pos=0.5] {philo0→fork1:req} (n_4);
+        \draw[->] (n_4) to[bend right=20] node[midway, right, pos=0.5] {philo0→fork\{0,1\}:release} (n_1);
+        \draw[->] (n_3) -- node[midway, above, pos=0.5] {philo1→fork0:req} (n_6);
+        \draw[->] (n_6) to[bend left=20] node[midway, left, pos=0.5] {philo1→fork\{0,1\}:release} (n_1);
+      \end{tikzpicture}
+    }
+  % }%
+  \caption{Global view of the dining philosophers example.}
+  \label{graph:philosophers}
+\end{figure}

@@ -1,0 +1,10 @@
+Explore and evaluate various models and paradigms that facilitate the development of robust and scalable concurrent applications is one of the primary aim of this project. We explore the bottom-up approaches that ``extract" global views from code. Note that bottom-up approaches
+exist~\cite{myh09,lt12,LangeTY15,cflm17,cms18}, but they have several
+limitations.
+%
+Firstly, they produce global views out of abstract models of local views (such as communicating-finite state machines~\cite{bz83} or some kind of behavioral types~\cite{Huttel+16}) and not from actual code written in a mainstream programming language (such as Erlang). Secondly, the extracted global views do faithfully capture the behavior of a local view only under some ``well-formedness" conditions. Crucially, this would hide buggy or unexpected behavior.
+%
+This is exactly the case where a global view would be most useful: the program is buggy and, in order to fix the bug, we need to understand the application-level protocol via a global abstract
+description.
+%
+For this project, we focus particularly on enhancing an existing tool that tries to extract choreographies with a bottom-up, over-approximated approach. In the next section, we'll define what are the requirements and the challenges to address this problem in the best way.

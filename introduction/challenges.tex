@@ -1,0 +1,77 @@
+We have given above a number of requirements that the approach we
+envisage should satisfy, but the reader familiar with the topic may
+have already found a number of potential difficulties. Indeed, we are
+aware of a few problems that need to be solved in order to make such
+an approach feasible. We describe them below, together with possible
+mitigation measures:
+
+\begin{description}
+\item[Undecidability:]
+	 extracting a precise description of all the behaviors of a system
+	 is in general impossible, since it would require, e.g., deciding
+	 termination.
+	 %
+	 Hence, one can focus on extracting a precise choreography in
+    simple cases and giving approximations of the behavior
+    otherwise.
+	 %
+	 An over-approximation may exhibit spurious behavior
+	 w.r.t.\ the actual behavior of the system.
+	 %
+	 Thus, one can understand the actual behavior, including bugs;
+	 however, it is necessary to verify if the reported bugs are false
+	 positives.
+	 %
+	 Therefore, care should be taken to limit the number of
+	 false positives, since a too high number would make the approach
+	 not viable.
+	 %
+	 Over-approximations can be too coarse; e.g., if it is not
+	 possible to statically determine which is the expected recipient of a
+	 message, an over-approximation may yield a huge number of spurious
+	 communications by adding an interaction for each participant in
+	 the system.
+	 %
+	 When, as in the case discussed above, over-approximations are not
+	 suitable, an under-approximation may be more useful, possibly
+	 paired with warnings highlighting issues.
+	 %
+	 The problem in this case is to make sure that false negatives are
+	 avoided, i.e., cutting off misbehavior from extracted
+	 choreographies.
+	 % 
+  % extracting a precise description of all the behaviors of a system
+  % is in general impossible, since this would imply, e.g., knowing
+  % whether the system terminates or not. Hence, one can focus on
+  % extracting a precise choreography in simple cases, while giving
+  % approximations of the behaviors otherwise. Ideally, one would have
+  % an over-approximation, hence showing all the possible behaviors,
+  % but possibly having a few spurious ones. Thus, one can understand
+  % all the possible behaviors, including buggy ones, and then test in
+  % the real system if such buggy behaviors actually happen or are
+  % false positives. Of course, care should be taken to limit the
+  % number of false positives, since a too high number would make the
+  % approach useless.  We also mention that in some specific cases
+  % an over-approximation may be too coarse, hence an
+  % under-approximation may be more useful in practice. E.g., if it is
+  % not possible to statically determine which is the expected
+  % recipient of a message, an over-approximation would require to add
+  % an interaction for each possible recipient, i.e., each participant
+  % in the system. This may create a huge number of spurious messages,
+  % hence maybe in these cases an under-approximation---not showing
+  % the interaction for this message---may be more useful, possibly
+  % paired with a warning highlighting the issue.
+  \item[Huge descriptions:] choreographies of real programs may be
+    huge, thus hindering their usefulness for program understanding.
+    We believe this issue should be tackled by providing tools to
+    abstract, explore, or better visualize the choreography. 
+    For instance, one
+    may decide that in order to understand a particular behavior interaction, some participants are not of interest, hence should be
+    removed (e.g., like $\epsilon$-transitions in automata based
+    approaches). Another option to reduce the size of the description
+    could be to collapse behaviors which are equal up to swap of
+    concurrent actions (as in partial order reduction techniques
+    within model checking \cite{God97}), or collapse the behaviors
+	 of multiple
+    processes executing the same code.
+\end{description}

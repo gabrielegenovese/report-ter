@@ -1,0 +1,46 @@
+In order to better illustrate our point, we present in this section two examples (using Erlang-like, actor-based pseudocode), each one
+composed by a pseudocode and the corresponding Choreography
+Automaton~\cite{coordination2020-chorAuto} (a graphical way of
+representing a finite-state machine) of the global view of the
+communicating system. Here, a \emph{global view} is an abstract description of
+all the possible behaviors of the full system. We consider a language
+where receive statements are blocking operations. A state where each
+participant has completed its task and terminated is called \emph{final}. As such, a
+state that is not final and has no outgoing transitions is a \emph{deadlock}.
+
+The first example is a concise reproduction of the dining philosophers
+problem, which highlights a possible deadlock. The second example
+shows a possible mutual exclusion error 
+when operating a simple bank account.
+%in a database.
+%
+Both examples are available online~\cite{chorer_examples}; the
+corresponding automata have been obtained with the help of our prototype tool
+Chorer~\cite{chorer}.
+
+\lstset{language=erlang, basicstyle=\sffamily\footnotesize,
+  keywordstyle=\color{blue}, numberstyle=\tiny, numbers=none,
+  showspaces=false, showstringspaces=false, frame=tL,
+  backgroundcolor=\color{black!5}, morekeywords={send, to, from} }
+
+
+In the examples, we exploit two operations for sending and receiving messages,
+respectively.
+%
+More precisely, \lstinline[language=erlang, morekeywords={send,
+  to}]{send msg to proc} sends message \lstinline{msg} to process
+\lstinline{proc}, while \lstinline[morekeywords={receive,
+  from}]{receive pat1 from proc1 -> e1;...;patn from procn -> en} 
+  represents a branching point where the process receives 
+  the first message 
+  that matches a pattern $\mathsf{pati}$ and, then, 
+  continues with the execution of $\mathsf{ei}$. 
+  As in Erlang, 
+  %we allow \lstinline[language=erlang]{receive}
+%statement with multiple clauses where the 
+pattern matching is tried from top to bottom.
+% when there are
+%multiple clauses.
+When a receive has only one clause, we abbreviate it as
+\lstinline[morekeywords={receive,from}]{receive pat from proc}
+(and continues with the execution of the next sentence).

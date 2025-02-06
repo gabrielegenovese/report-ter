@@ -1,0 +1,128 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{newlfont}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{lipsum}
+\usepackage{tikz}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{stmaryrd}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{xcolor, colortbl}
+\usepackage{todonotes}
+\usepackage{pgfgantt}
+\usepackage{graphicx}
+\usepackage{dirtree}
+
+\usetikzlibrary{automata,arrows}
+\pgfmathtruncatemacro\distance{1}
+
+\definecolor{green}{rgb}{0,0.5,0}
+\definecolor{red}{rgb}{0.5,0,0}
+\definecolor{yellow}{rgb}{0.5,0.5,0}
+\definecolor{codeashgrey}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{ashgrey}{rgb}{0.7, 0.75, 0.71}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codeashgrey},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\title{Final report: Extract Choreography Automata for Program Understanding}
+\author{Student: Gabriele Genovese\\Supervisor: Cinzia Di Giusto}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+
+\section*{Abstract}
+The recent development of concurrent and distributed applications has raised new interest in programming paradigms incorporating threads and message passing into their logic. The use of choreographies
+%which are behavioral types, 
+can ensure some of the typical properties of concurrent systems (such as liveness, lock freedom and deadlock freedom). ChorEr is a preliminary static analysis tool for a fragment of Erlang programs that generates choreography automata. We plan to build on the existing tool to implement new functionalities and cover more primitives, thus extending the expressiveness of the language under consideration.
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+\input{introduction/intro}
+
+\subsection{Motivations}
+\input{introduction/motivation}
+
+\subsection{Aim}
+\input{introduction/aim}
+
+\subsection{Requirements}
+\input{introduction/requirements}
+
+\subsection{Challenges}
+\input{introduction/challenges}
+
+% \subsection{Choreographies} %% trasferito in theory
+% \input{introduction/choreography}
+
+\subsection{State of the Art}
+\input{introduction/sota}
+
+\section{Chorer}
+\input{content/chorer}
+
+\subsection{Basics of the theory}
+\input{content/theory}
+
+\subsection{Description of the tool}
+\input{content/description}
+
+\subsection{What's changed}
+\input{content/whatschanged}
+
+\section{Conclusion}
+\input{conclusion}
+
+\subsection{Related works}
+\input{rw}
+
+\newpage
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}

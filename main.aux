@@ -1,0 +1,158 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{WS-CDL}
+\citation{WS-CDL}
+\citation{BPMN}
+\citation{HondaYC16}
+\citation{Huttel+16}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivations}{3}{subsection.1.1}\protected@file@percent }
+\citation{myh09}
+\citation{lt12}
+\citation{LangeTY15}
+\citation{cflm17}
+\citation{cms18}
+\citation{bz83}
+\citation{Huttel+16}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Aim}{4}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Requirements}{4}{subsection.1.3}\protected@file@percent }
+\citation{God97}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Challenges}{5}{subsection.1.4}\protected@file@percent }
+\citation{website:elixir}
+\citation{website:golang}
+\citation{honda2008multiparty}
+\citation{zava}
+\citation{website:wscdl}
+\citation{website:bpmn}
+\citation{montesi2010jolie}
+\citation{montesi2014choreographic}
+\citation{giallorenzo2020object}
+\citation{dalla2014aiocj}
+\citation{barbanerachoreography}
+\citation{orlando2021corinne}
+\citation{cruz2017paths}
+\citation{cruz2022implementing}
+\citation{genovese2023chorer}
+\citation{website:chorer}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}State of the Art}{6}{subsection.1.5}\protected@file@percent }
+\newlabel{sota}{{1.5}{6}{State of the Art}{subsection.1.5}{}}
+\citation{barbanerachoreography}
+\citation{orlando2021corinne}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Chorer}{7}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Basics of the theory}{7}{subsection.2.1}\protected@file@percent }
+\newlabel{code:noasync}{{1}{7}{Two processes exchanging messages synchronously}{lstlisting.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Two processes exchanging messages synchronously}{7}{lstlisting.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Local view of \texttt  {main}}}{8}{figure.1}\protected@file@percent }
+\newlabel{local:main}{{1}{8}{Local view of \texttt {main}}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Local view of \texttt  {dummy}}}{8}{figure.2}\protected@file@percent }
+\newlabel{local:dummy1a}{{2}{8}{Local view of \texttt {dummy}}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Global view of Code \ref {code:noasync}}}{8}{figure.3}\protected@file@percent }
+\newlabel{global:noasync}{{3}{8}{Global view of Code \ref {code:noasync}}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Description of the tool}{8}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{How to use the tool}{8}{section*.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Usage message}{9}{lstlisting.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}Use example of the tool}{9}{lstlisting.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Struttura del tool}{10}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}From Erlang to Choreographies}{10}{subsubsection.2.2.1}\protected@file@percent }
+\newlabel{sec:corrisp}{{2.2.1}{10}{From Erlang to Choreographies}{subsubsection.2.2.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Viste locali}{10}{section*.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Grafo locale per il costrutto \texttt  {receive}}}{10}{figure.4}\protected@file@percent }
+\newlabel{grafo:receive}{{4}{10}{Grafo locale per il costrutto \texttt {receive}}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Grafo locale per il costrutto \texttt  {!}}}{11}{figure.5}\protected@file@percent }
+\newlabel{grafo:send}{{5}{11}{Grafo locale per il costrutto \texttt {!}}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Grafo locale per il costrutto \texttt  {spawn}}}{11}{figure.6}\protected@file@percent }
+\newlabel{grafo:spawn}{{6}{11}{Grafo locale per il costrutto \texttt {spawn}}{figure.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Chiamate di funzioni}{11}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Chiamate ricorsive}{11}{section*.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Grafo della chiamata ricorsiva di una funzione}}{11}{figure.7}\protected@file@percent }
+\newlabel{grafo:ricors}{{7}{11}{Grafo della chiamata ricorsiva di una funzione}{figure.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Chiamata a una funzione generica}{11}{section*.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Grafo di una chiamata di funzione}}{11}{figure.8}\protected@file@percent }
+\newlabel{grafo:funcall}{{8}{11}{Grafo di una chiamata di funzione}{figure.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{Viste globali}{12}{section*.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Grafo globale per il costrutto \texttt  {spawn}}}{12}{figure.9}\protected@file@percent }
+\newlabel{grafo:globspawn}{{9}{12}{Grafo globale per il costrutto \texttt {spawn}}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Grafo globale per \texttt  {receive} e \texttt  {!}}}{12}{figure.10}\protected@file@percent }
+\newlabel{grafo:sendrecv}{{10}{12}{Grafo globale per \texttt {receive} e \texttt {!}}{figure.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Main algorithms}{12}{subsubsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Execution}{12}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Modulo \texttt  {local\_view.erl}}{13}{section*.11}\protected@file@percent }
+\newlabel{code:eval}{{4}{13}{Codice di \texttt {eval\_codeline}}{lstlisting.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}Codice di \texttt  {eval\_codeline}}{13}{lstlisting.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Modulo \texttt  {global\_view.erl}}{14}{section*.12}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}Funzione \texttt  {proc\_loop} che simula un attore}{14}{lstlisting.5}\protected@file@percent }
+\newlabel{code:global}{{6}{15}{Codice principale per costruire una vista globale}{lstlisting.6}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Codice principale per costruire una vista globale}{15}{lstlisting.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Old state}{15}{section*.13}\protected@file@percent }
+\citation{coordination2020-chorAuto}
+\citation{chorer_examples}
+\citation{chorer}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}What's changed}{16}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Attributed grammar}{16}{subsubsection.2.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}New examples}{16}{subsubsection.2.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Dining Philosophers Example}{16}{section*.14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Global view of the dining philosophers example.}}{17}{figure.11}\protected@file@percent }
+\newlabel{graph:philosophers}{{11}{17}{Global view of the dining philosophers example}{figure.11}{}}
+\citation{BPMN}
+\citation{bon18}
+\citation{fmmt20}
+\citation{DBLP:journals/software/AutiliIT15}
+\citation{myh09}
+\citation{lt12}
+\citation{lty15}
+\citation{bz83}
+\citation{lt12}
+\citation{lty15}
+\citation{sw02}
+\citation{mil99}
+\citation{mpw92}
+\citation{bz83}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Global view of the bank account example}}{18}{figure.12}\protected@file@percent }
+\newlabel{fig:account}{{12}{18}{Global view of the bank account example}{figure.12}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}Feature}{19}{subsubsection.2.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}Bug Fix}{19}{subsubsection.2.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.5}Benchmarks}{19}{subsubsection.2.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Conclusion}{19}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Related works}{19}{subsection.3.1}\protected@file@percent }
+\bibstyle{plain}
+\bibdata{ref}
+\bibcite{DBLP:journals/software/AutiliIT15}{1}
+\bibcite{barbanerachoreography}{2}
+\bibcite{coordination2020-chorAuto}{3}
+\bibcite{bon18}{4}
+\bibcite{bz83}{5}
+\bibcite{cms18}{6}
+\bibcite{chorer}{7}
+\bibcite{website:wscdl}{8}
+\bibcite{cflm17}{9}
+\bibcite{cruz2017paths}{10}
+\bibcite{cruz2022implementing}{11}
+\bibcite{dalla2014aiocj}{12}
+\bibcite{chorer_examples}{13}
+\bibcite{fmmt20}{14}
+\bibcite{website:chorer}{15}
+\bibcite{genovese2023chorer}{16}
+\bibcite{giallorenzo2020object}{17}
+\bibcite{God97}{18}
+\bibcite{website:golang}{19}
+\bibcite{honda2008multiparty}{20}
+\bibcite{HondaYC16}{21}
+\bibcite{zava}{22}
+\bibcite{Huttel+16}{23}
+\bibcite{website:bpmn}{24}
+\bibcite{WS-CDL}{25}
+\bibcite{lt12}{26}
+\bibcite{LangeTY15}{27}
+\bibcite{lty15}{28}
+\bibcite{mil99}{29}
+\bibcite{mpw92}{30}
+\bibcite{montesi2010jolie}{31}
+\bibcite{montesi2014choreographic}{32}
+\bibcite{myh09}{33}
+\bibcite{BPMN}{34}
+\bibcite{orlando2021corinne}{35}
+\bibcite{sw02}{36}
+\bibcite{website:elixir}{37}
+\gdef \@abspage@last{23}

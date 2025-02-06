@@ -1,0 +1,38 @@
+Below, we define the requirements that an automatic choreographic bottom-up approach should satisfy to enable its use for program understanding:
+\begin{itemize}
+    \item \textit{Bottom-up approach:} one should be able to automatically derive a choreography from code, so that it can be used  to help understand the code.
+    \item \textit{Push-button technique:} the extraction of the choreography
+    should be fully automatic, to be applicable to existing code
+    without the need to add special annotations or any other input
+    from the programmer.
+    \item \textit{Always return a choreography:} even if the
+         system is not well-behaved, hence its behavior can not be
+         described by a choreography in the classical sense (since
+         classical choreographies ensure by construction properties
+         such as race and deadlock freedom). The extracted
+         choreography should contain at least all the good behaviors,
+         and possibly information on the not-well behaved parts.
+    \item \textit{Highlight misbehavior:}
+  debugging is our key reason to extract a choreographic description
+  from code; therefore, extracted choreographies should explicitly flag
+  misbehavior due to communications such as deadlocks, orphan
+  messages, unspecified receptions, etc.
+    \item \textit{Applicable to mainstream languages:} one should be able to
+    extract the choreography from a real program written in a
+    mainstream language. Natural targets are languages with a clean concurrency model and 		dedicated primitives for message-passing such as Erlang, Go, and Scala.
+    \item \textit{Support creation and termination of participants:} in real
+    message-passing systems new processes can be spawned, and some processes may
+    terminate. Hence, a choreographic description should allow for
+    a dynamic  number of participants.
+    \item \textit{Support races:} races are disallowed by many choreographic
+    approaches, yet are common in real programs. As such, they should
+    be described (and possibly highlighted as potentially wrong in
+    line with the idea of highlighting misbehavior), but not
+    forbidden.
+    \item \textit{Accessible yet precise notation:} choreographies
+    should be represented with an intuitive, possibly
+    graphical, formalism to improve readability. Instead of the usual algebraic
+    formalisms one should appeal to graph-like notations such as
+    labeled transition systems or finite state automata that pair a graphical representation with a
+    well-defined  mathematical definition.
+\end{itemize}

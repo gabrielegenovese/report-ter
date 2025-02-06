@@ -1,0 +1,12 @@
+\label{sota}
+In the industrial context, Erlang's actor model has also inspired other programming languages or frameworks, such as Elixir \cite{website:elixir}, a programming language based on Erlang's virtual machine. Other programming languages also implement the actor model, such as Go \cite{website:golang} with its GoRoutines (comparable to Erlang's spawns) and channels (similar to Erlang's send and receive).
+
+\bigskip
+
+In the academic context, research in the field of \textit{choreography} focuses on two main topics: \textit{choreography specification} and \textit{choreographic programming}.
+\begin{itemize}
+    \item \textit{Choreography specifications}: this area includes formal methods, such as multiparty asynchronous session types \cite{honda2008multiparty}, which have been established to describe the interactive structure of a fixed number of actors from a global perspective. These methods enable the syntactic verification of actors' correctness by projecting the global specification onto individual participants. Choreography specifications are also studied as contracts, which provide abstract descriptions of program behavior, known as \textit{multiparty contracts} \cite{zava}.
+    \item \textit{Choreographic programming}: this programming paradigm has been explored both theoretically, as in \cite{website:wscdl}, and industrially, as in \cite{website:bpmn}. Several choreographic programming languages have been designed and studied to support this paradigm \cite{montesi2010jolie, montesi2014choreographic, giallorenzo2020object, dalla2014aiocj}.
+\end{itemize}
+
+A way to formalize choreographies is through Choreographic Automata \cite{barbanerachoreography}, which describe a communication system using a finite-state automaton. By using this model, it is possible to use the results of automaton studies to demonstrate the mentioned properties \cite{orlando2021corinne}. Most formal works on communication protocol specifications emphasize the projection of a global specification onto local specifications. However, the process of choreography extraction remains challenging and has been explored in \cite{cruz2017paths}, with a general framework for extracting choreographies presented in \cite{cruz2022implementing}. In our work, we aim at extracting choreographies from an existing and widely-used programming language like Erlang, despite it not being originally designed with choreography in mind.

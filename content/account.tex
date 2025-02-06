@@ -1,0 +1,115 @@
+We now consider a system where a bank account is accessed
+by two clients, dubbed C1 and C2.
+% 
+\tikzset{
+	hpath/.style={
+			very thick,
+			line cap = round,
+			line join = round,
+			line width=0.1cm,
+			opacity=.70,
+			color = teal!30
+		}
+}
+
+\begin{lstlisting}
+account(Value) ->
+  receive
+    read from Client ->
+      send Value to Client,
+      account(Value);
+    NewValue from Client ->
+      account(NewValue).
+
+client() ->
+  send read to Acc,
+  receive Value from Acc,
+  % operations on Value
+  send NewValue to Acc.
+\end{lstlisting}
+
+The pseudocode yields the behavior of the bank account,
+where $\mathsf{Value}$ represents its current balance.
+%
+This process waits for requests from a client.
+%
+A request can either be a \lstinline{read} access to know
+the current balance or an update request of such value to a
+\lstinline{NewValue}.
+
+Symmetrically, client processes C1 and C2 behave according to the
+pseudocode on the left: the process reads the current balance
+from the account,
+performs some internal operations based on such value, and
+updates the balance.
+%
+The global view of the communicating system is depicted in
+Figure~\ref{fig:account}.
+\newcommand\dummy{C}
+\begin{figure}[h!]
+	\centering
+	\begin{tikzpicture}[node distance={27mm}, scale = .6, transform shape, thick, main/.style = {draw, circle}]
+		\node (n_1) [state] {};
+		\node (n_2) [state, below left of=n_1] {};
+		\node (n_3) [state, below right of=n_1] {};
+		\node (n_4) [state, left= 3.5cm of n_2] {4};
+		\node (n_5) [state, below=3cm of n_1] {};
+		\node (n_6) [state, right= 3.5cm of n_3] {6};
+		\node (n_7) [state, below of=n_4] {7};
+		\node (n_8) [state, below left of=n_5] {};
+		\node (n_9) [state, below right of=n_5] {};
+		\node (n_10) [state, below of=n_6] {10};
+		\node (n_11) [state, accepting, below= of n_7] {11};
+		\node (n_12) [state, accepting, below=1.5cm of n_8] {};
+		\node (n_13) [state, accepting, below= 1.5cm of n_9] {};
+		\node (n_14) [state, accepting, below=2.5cm of n_10] {14};
+
+		\draw[->] (n_1) -- node[midway, above left] {acc→\dummy1:Value} (n_2);
+		\draw[->] (n_2) -- node[midway, below left] {acc→\dummy2:Value} (n_5);
+		\draw[->] (n_5) -- node[midway, above left=-2mm] {\dummy1→acc:NewValue} (n_8);
+		\draw[->] (n_8) -- node[midway, below left] {\dummy2→acc:NewValue} (n_12);
+
+		\draw[->] (n_1) -- node[midway, above right] {acc→\dummy2:Value} (n_3);
+		\draw[->] (n_3) -- node[midway, below right] {acc→\dummy1:Value} (n_5);
+		\draw[->] (n_5) -- node[midway, above right=-2mm] {\dummy2→acc:NewValue} (n_9);
+		\draw[->] (n_9) -- node[midway, below right] {\dummy1→acc:NewValue} (n_13);
+
+		\draw[hpath] ($(n_1.center) + (-5pt,-5pt)$) -- (n_2.center) -- (n_5.north west) -- ($(n_5.center)+(-5pt,0)$) -- (n_5.south west) -- (n_8.center) -- ($(n_12.center) + (0pt,5pt)$);
+		\draw[hpath] ($(n_1.center) + (5pt,-5pt)$) -- (n_3.center) -- (n_5.north east)  -- ($(n_5.center)+(5pt,0)$) -- (n_5.south east)  -- (n_9.center) -- ($(n_13.center) + (0pt,5pt)$);
+
+		\foreach \n in {1,2,3,5,8,9,12,13}{
+				\node at (n_\n) {\n};
+			}
+
+		\draw[->] (n_2) -- node[midway, above=3mm] {C1→acc:NewValue} (n_4);
+		\draw[->] (n_4) -- node[midway, above left] {acc→C2:Value} (n_7);
+		\draw[->] (n_7) -- node[midway, above left] {C2→acc:NewValue} (n_11);
+
+		\draw[->] (n_3) -- node[midway, above=3mm] {C2→acc:NewValue} (n_6);
+		\draw[->] (n_6) -- node[midway, above right] {acc→C1:Value} (n_10);
+		\draw[->] (n_10) -- node[midway, above right] {C1→acc:NewValue} (n_14);
+	\end{tikzpicture}
+	\caption{Global view of the bank account example}
+	\label{fig:account}
+\end{figure}
+% 
+We can observe two correct executions where the operations are
+performed in a read-update-read-update order (taking the path via
+states 1-2-4-7-11 or the one via states 1-3-6-10-14).
+%
+However, there is also a read-read-update-update order on the
+highlighted paths.
+%
+Although the choreography is not inherently incorrect, these
+highlighted paths could represent a violation of mutual exclusion
+which may be undesirable for developers in certain
+contexts.
+The choreography automaton in Figure~\ref{fig:account} helps in spotting
+this issue.
+
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "main"
+%%% End:

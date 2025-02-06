@@ -1,0 +1,192 @@
+\begin{thebibliography}{10}
+
+\bibitem{DBLP:journals/software/AutiliIT15}
+Marco Autili, Paola Inverardi, and Massimo Tivoli.
+\newblock Automated synthesis of service choreographies.
+\newblock {\em {IEEE} Softw.}, 32(1):50--57, 2015.
+
+\bibitem{barbanerachoreography}
+Franco Barbanera, Ivan Lanese, and Emilio Tuosto.
+\newblock Choreography automata.
+\newblock In {\em Coordination Models and Languages: 22nd IFIP WG 6.1 International Conference, COORDINATION 2020, Held as Part of the 15th International Federated Conference on Distributed Computing Techniques, DisCoTec 2020, Valletta, Malta, June 15--19, 2020, Proceedings 22}, pages 86--106. Springer, 2020.
+
+\bibitem{coordination2020-chorAuto}
+Franco Barbanera, Ivan Lanese, and Emilio Tuosto.
+\newblock Choreography automata.
+\newblock In Simon Bliudze and Laura Bocchi, editors, {\em Coordination Models and Languages - 22nd {IFIP} {WG} 6.1 International Conference, {COORDINATION} 2020, Held as Part of the 15th International Federated Conference on Distributed Computing Techniques, DisCoTec 2020, Valletta, Malta, June 15-19, 2020, Proceedings}, volume 12134 of {\em Lecture Notes in Computer Science}, pages 86--106. Springer, 2020.
+
+\bibitem{bon18}
+Jonas Bon\'er.
+\newblock {\em {Reactive Microsystems - The Evolution Of Microservices At Scale}}.
+\newblock O'Reilly, 2018.
+
+\bibitem{bz83}
+Daniel Brand and Pitro Zafiropulo.
+\newblock {On Communicating Finite-State Machines}.
+\newblock {\em Journal of the ACM}, 30(2):323--342, 1983.
+
+\bibitem{cms18}
+Marco Carbone, Fabrizio Montesi, and Carsten Sch\"urmann.
+\newblock Choreographies, logically.
+\newblock {\em Distri. Comput.}, (31):51--67, 2018.
+
+\bibitem{chorer}
+Chorer github repository.
+\newblock \url{https://github.com/gabrielegenovese/chorer}.
+
+\bibitem{website:wscdl}
+World Wide~Web Consortium.
+\newblock {Web Services Choreography Description Language Version 1.0}.
+\newblock \url{https://www.w3.org/TR/ws-cdl-10/}.
+\newblock [Online; accessed 06-June-2023].
+
+\bibitem{cflm17}
+Lu\'{\i}s Cruz-Filipe, {Kim S.} Larsen, and Fabrizio Montesi.
+\newblock The paths to choreography extraction.
+\newblock In {\em Proceedings of the 20th International Conference on Foundations of Software Science and Computation Structures - Volume 10203}, page 424–440, Berlin, Heidelberg, 2017. Springer.
+
+\bibitem{cruz2017paths}
+Lu{\'\i}s Cruz-Filipe, Kim~S Larsen, and Fabrizio Montesi.
+\newblock The paths to choreography extraction.
+\newblock In {\em International Conference on Foundations of Software Science and Computation Structures}, pages 424--440. Springer, 2017.
+
+\bibitem{cruz2022implementing}
+Lu{\'\i}s Cruz-Filipe, Kim~S Larsen, Fabrizio Montesi, and Larisa Safina.
+\newblock Implementing choreography extraction.
+\newblock {\em arXiv preprint arXiv:2205.02636}, 2022.
+
+\bibitem{dalla2014aiocj}
+Mila Dalla~Preda, Saverio Giallorenzo, Ivan Lanese, Jacopo Mauro, and Maurizio Gabbrielli.
+\newblock Aiocj: A choreographic framework for safe adaptive distributed applications.
+\newblock In {\em Software Language Engineering: 7th International Conference, SLE 2014, V{\"a}ster{\aa}s, Sweden, September 15-16, 2014. Proceedings 7}, pages 161--170. Springer, 2014.
+
+\bibitem{chorer_examples}
+Two simple examples.
+\newblock \href{https://github.com/gabrielegenovese/chorer/tree/master/examples/dining}{Dining} example and \href{https://github.com/gabrielegenovese/chorer/tree/master/examples/account}{Account} example, \url{https://github.com/gabrielegenovese/chorer/tree/master/examples/dining} \url{https://github.com/gabrielegenovese/chorer/tree/master/examples/account}.
+
+\bibitem{fmmt20}
+Leonardo Frittelli, Facundo Maldonado, Hern{\'{a}}n~C. Melgratti, and Emilio Tuosto.
+\newblock A choreography-driven approach to apis: The opendxl case study.
+\newblock In Simon Bliudze and Laura Bocchi, editors, {\em Coordination Models and Languages - 22nd {IFIP} {WG} 6.1 International Conference, {COORDINATION} 2020, Held as Part of the 15th International Federated Conference on Distributed Computing Techniques, DisCoTec 2020, Valletta, Malta, June 15-19, 2020, Proceedings}, volume 12134 of {\em Lecture Notes in Computer Science}, pages 107--124. Springer, 2020.
+
+\bibitem{website:chorer}
+Gabriele Genovese.
+\newblock {ChorEr}.
+\newblock \url{https://github.com/gabrielegenovese/chorer}.
+\newblock [Online; accessed 05-July-2023].
+
+\bibitem{genovese2023chorer}
+Gabriele Genovese.
+\newblock Chorer: un analizzatore statico per generare automi coreografici da codice sorgente erlang.
+\newblock Bachelor's thesis, University of Bologna, 2023.
+
+\bibitem{giallorenzo2020object}
+Saverio Giallorenzo, Fabrizio Montesi, and Marco Peressotti.
+\newblock Object-oriented choreographic programming.
+\newblock {\em arXiv preprint arXiv:2005.09520}, 2020.
+
+\bibitem{God97}
+Patrice Godefroid.
+\newblock Model checking for programming languages using verisoft.
+\newblock In {\em POPL}, pages 174--186, 1997.
+
+\bibitem{website:golang}
+Google.
+\newblock {GoLang}.
+\newblock \url{https://go.dev/}, 2009.
+\newblock [Online; accessed 26-May-2023].
+
+\bibitem{honda2008multiparty}
+Kohei Honda, Nobuko Yoshida, and Marco Carbone.
+\newblock Multiparty asynchronous session types.
+\newblock In {\em Proceedings of the 35th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages}, pages 273--284, 2008.
+
+\bibitem{HondaYC16}
+Kohei Honda, Nobuko Yoshida, and Marco Carbone.
+\newblock Multiparty asynchronous session types.
+\newblock {\em J. {ACM}}, 63(1):9:1--9:67, 2016.
+
+\bibitem{zava}
+Hans H{\"u}ttel, Ivan Lanese, Vasco~T Vasconcelos, Lu{\'\i}s Caires, Marco Carbone, Pierre-Malo Deni{\'e}lou, Dimitris Mostrous, Luca Padovani, Ant{\'o}nio Ravara, Emilio Tuosto, et~al.
+\newblock Foundations of session types and behavioural contracts.
+\newblock {\em ACM Computing Surveys (CSUR)}, 49(1):1--36, 2016.
+
+\bibitem{Huttel+16}
+Hans H{\"{u}}ttel, Ivan Lanese, Vasco~T. Vasconcelos, Lu{\'{\i}}s Caires, Marco Carbone, Pierre{-}Malo Deni{\'{e}}lou, Dimitris Mostrous, Luca Padovani, Ant{\'{o}}nio Ravara, Emilio Tuosto, Hugo~Torres Vieira, and Gianluigi Zavattaro.
+\newblock Foundations of session types and behavioural contracts.
+\newblock {\em {ACM} Comput. Surv.}, 49(1):3:1--3:36, 2016.
+
+\bibitem{website:bpmn}
+IBM.
+\newblock {Creating BPMN choreography diagrams}.
+\newblock \url{https://www.ibm.com/docs/en/rational-soft-arch/9.7.0?topic=diagrams-creating-bpmn-choreography}.
+\newblock [Online; accessed 18-June-2023].
+
+\bibitem{WS-CDL}
+Nickolas Kavantzas, David Burdett, Gregory Ritzinger, Tony Fletcher, Yves Lafon, and Charlton Barreto.
+\newblock Web services choreography description language version 1.0.
+\newblock Technical report, W3C, 2005.
+\newblock \url{http://www.w3.org/TR/ws-cdl-10/}.
+
+\bibitem{lt12}
+Julien Lange and Emilio Tuosto.
+\newblock Synthesising choreographies from local session types.
+\newblock In {\em CONCUR 2012}, volume 7454 of {\em LNCS}. Springer, 2012.
+
+\bibitem{LangeTY15}
+Julien Lange, Emilio Tuosto, and Nobuko Yoshida.
+\newblock From communicating machines to graphical choreographies.
+\newblock In Sriram~K. Rajamani and David Walker, editors, {\em POPL}, pages 221--232. {ACM}, 2015.
+
+\bibitem{lty15}
+Julien Lange, Emilio Tuosto, and Nobuko Yoshida.
+\newblock {From Communicating Machines to Graphical Choreographies}.
+\newblock In {\em POPL15}, pages 221--232, 2015.
+
+\bibitem{mil99}
+Robin Milner.
+\newblock {\em Communicating and Mobile Systems: the $\pi$-calculus}.
+\newblock Cambridge University Press, 1999.
+
+\bibitem{mpw92}
+Robin Milner, Joachim Parrow, and David Walker.
+\newblock {A Calculus of Mobile Processes, I and II}.
+\newblock {\em Inf. and Comp.}, 100(1), 1992.
+
+\bibitem{montesi2010jolie}
+Fabrizio Montesi.
+\newblock Jolie: a service-oriented programming language.
+\newblock Master's thesis, University of Bologna, 2010.
+
+\bibitem{montesi2014choreographic}
+Fabrizio Montesi.
+\newblock {\em Choreographic programming}.
+\newblock IT-Universitetet i K{\o}benhavn, 2014.
+
+\bibitem{myh09}
+Dimitris Mostrous, Nobuko Yoshida, and Kohei Honda.
+\newblock Global principal typing in partially commutative asynchronous sessions.
+\newblock In Giuseppe Castagna, editor, {\em Programming Languages and Systems}, pages 316--332, Berlin, Heidelberg, 2009. Springer.
+
+\bibitem{BPMN}
+OMG.
+\newblock {\em Business Process Model and Notation (BPMN), Version 2.0}, January 2011.
+\newblock \url{https://www.omg.org/spec/BPMN}.
+
+\bibitem{orlando2021corinne}
+Simone Orlando, Vairo~Di Pasquale, Franco Barbanera, Ivan Lanese, and Emilio Tuosto.
+\newblock Corinne, a tool for choreography automata.
+\newblock In {\em Formal Aspects of Component Software: 17th International Conference, FACS 2021, Virtual Event, October 28--29, 2021, Proceedings 17}, pages 82--92. Springer, 2021.
+
+\bibitem{sw02}
+Davide Sangiorgi and David Walker.
+\newblock {\em {The {$\pi$}-Calculus: a Theory of Mobile Processes}}.
+\newblock Cambridge University Press, 2002.
+
+\bibitem{website:elixir}
+The~Elixir Team.
+\newblock Elixir.
+\newblock \url{https://elixir-lang.org/}, 2012.
+\newblock [Online; accessed 26-May-2023].
+
+\end{thebibliography}
