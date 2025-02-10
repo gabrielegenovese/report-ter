@@ -36,7 +36,9 @@ shell> ./_build/default/bin/chorer ./path/to/file.erl entrypoint/0
 \end{lstlisting}
 
 \paragraph{Struttura del tool}
-Il progetto si divide in due cartelle principali. Sotto la cartella \texttt{examples} ci sono vari esempi di programmi in Erlang su cui provare il tool. Il codice del tool si trova invece nella cartella \texttt{src}. 
+The project is divided into two main folders. Under the folder \texttt{examples},
+there are various examples of Erlang programs to test the tool. The tool's code
+is located in the \texttt{src} folder.
 
 \bigskip
 
@@ -102,8 +104,6 @@ transitions, from which the evaluation of the local view will resume.
 The send operation (\texttt{Pid ! message}) operation corresponds to Figure \ref{grafo:send}.  
 The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.  
 
-\bigskip
-
 \begin{figure}[ht!]
     \centering
     \begin{tikzpicture}[node distance={29mm}, thick, main/.style = {draw, circle}] 
@@ -126,7 +126,7 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       \draw[->] (n_6) -- node[midway, above, pos=0.5] {$\epsilon$} (n_8);
       \draw[->] (n_7) -- node[midway, above, pos=0.5] {$\epsilon$} (n_8);
     \end{tikzpicture}
-    \caption{Grafo locale per il costrutto \texttt{receive}}
+    \caption{Localview graph for the \texttt{receive} keyword}
     \label{grafo:receive}
 \end{figure}
 
@@ -139,11 +139,9 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {ProcSent ! message} (n_2);
     \end{tikzpicture}
-    \caption{Grafo locale per il costrutto \texttt{!}}
+    \caption{Localview graph for the \texttt{!} keyword}
     \label{grafo:send}
 \end{figure}
-
-\bigskip
 
 \begin{figure}[ht!]
     \centering
@@ -153,17 +151,14 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {$\Delta$ process} (n_2);
     \end{tikzpicture}
-    \caption{Grafo locale per il costrutto \texttt{spawn}}
+    \caption{Localview graph for the \texttt{spawn} function}
     \label{grafo:spawn}
 \end{figure}
 
-
-\paragraph{Chiamate di funzioni}
-Essendo un linguaggio di programmazione funzionale, vengono eseguite numerose chiamate di funzione. Le funzioni possono essere presenti nello stesso file, in un modulo differente, oppure possono essere funzioni \textit{built-in}. Di seguito vengono mostrate le chiamate di funzioni che modificano il comportamento del grafo.
-
-\paragraph{Chiamate ricorsive}
-
-Nel caso delle chiamate \textit{ricorsive}, si crea una transizione $\epsilon$ dall'ultimo nodo creato fino al primo nodo, come mostrato in figura \ref{grafo:ricors}.
+\paragraph{Recursive calls}
+In the case of \textit{recursive} calls, a transition $\epsilon$ is created from the last  
+node generated to the first node, as shown in Figure \ref{grafo:ricors}.
+For now, further evaluation of the function is blocked.
 
 \begin{figure}[ht!]
     \centering
@@ -176,14 +171,16 @@ Nel caso delle chiamate \textit{ricorsive}, si crea una transizione $\epsilon$ d
       \draw[->] (n_2) -- node[midway, above, pos=0.5] {\ldots} (n_3);
       \draw[->] (n_3) to [out=120,in=60] node[midway, above, pos=0.5] {$\epsilon$} (n_1);
     \end{tikzpicture}
-    \caption{Grafo della chiamata ricorsiva di una funzione}
+    \caption{Localview graph for a recursive call}
     \label{grafo:ricors}
 \end{figure}
 
-\paragraph{Chiamata a una funzione generica}
-Quando si incontra in chiamata ad una funzione non conosciuta, l'algoritmo creer\`a la vista locale della funzione chiamata e ``collegher\`a" l'inizio del grafo della funzione chiamata con l'ultimo stato creato nella vista locale della funzione chiamante, collegandolo con una transizione $\epsilon$. La vista locale continuer\`a dall'ultimo vertice del grafo della chiamata.
-
-\bigskip
+\paragraph{Function call}
+When a call to an unknown function is encountered, the algorithm will create the local  
+view of the called function and "connect" the beginning of the graph of the called  
+function with the last state created in the local view of the calling function, linking  
+them with an $\epsilon$ transition. The local view will continue from the last vertex of  
+the call graph.
 
 \begin{figure}[ht!]
     \centering
@@ -199,17 +196,18 @@ Quando si incontra in chiamata ad una funzione non conosciuta, l'algoritmo creer
       \draw[->] (n_3) -- node[midway, above, pos=0.5] {$\epsilon$} (n_4);
       \draw[->] (n_4) -- node[midway, above, pos=0.5] {\ldots} (n_5);
     \end{tikzpicture}
-    \caption{Grafo di una chiamata di funzione}
+    \caption{Localview graph of a function call}
     \label{grafo:funcall}
 \end{figure}
 
-Nel grafo \ref{grafo:funcall}, lo stato $1_a$ \`e lo stato iniziale della funzione chiamante e lo stato $1_b$ indica il primo stato della vista locale della funzione chiamata.
+In graph \ref{grafo:funcall}, state $1_a$ is the initial state of the calling function,  
+and state $1_b$ represents the first state of the local view of the called function.
 
-\paragraph{Viste globali}
-
-Per le viste globali, nelle \texttt{spawn} si specifica l'attore che esegue l'operazione a sinistra del simbolo come mostrato nella figura \ref{grafo:globspawn}. Una spawn verr\`a direttamente inserita nel grafo. Ogni processo verr\`a anche numerato, nel caso vengano creati molteplici attori per la stessa funzione.
-
-\bigskip
+\paragraph{Global view}
+For global views, in \texttt{spawn}, the actor performing the operation is specified to  
+the left of the symbol, as shown in Figure \ref{grafo:globspawn}. A spawn will be  
+directly inserted into the graph. Each process will also be numbered in case multiple  
+actors are created for the same function.
 
 \begin{figure}[ht!]
     \centering
@@ -219,15 +217,17 @@ Per le viste globali, nelle \texttt{spawn} si specifica l'attore che esegue l'op
       
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {ProcSpawner$_n\Delta$ProcSpawned$_m$} (n_2);
     \end{tikzpicture}
-    \caption{Grafo globale per il costrutto \texttt{spawn}}
+    \caption{Global view graph for the \texttt{spawn} function}
     \label{grafo:globspawn}
 \end{figure}
 
-\bigskip
-
-Per l'invio e la ricezione di messaggi, durante la simulazione degli attori, se vengono trovati due attori che eseguono una send e una receive compatibile, allora verr\`a aggiunta alla vista globale uno stato come in figura \ref{grafo:sendrecv}. Per essere compatibili, il processo ricevente deve corrispondere al destinatario dei dati e il pattern matching della receive deve combaciare con i dati inviati. Le transizioni \textit{send} e \textit{receive} fatte a ``vuoto" (cio\`e i messaggi che vengono inviati, ma non vengono processati da una \textit{receive} di un qualsiasi processo) non verranno mostrate nell'automa globale.
-
-\bigskip
+For message sending and receiving, during the simulation of actors, if two actors are  
+found executing a compatible \textit{send} and \textit{receive}, a state will be added  
+to the global view as shown in Figure \ref{grafo:sendrecv}. To be compatible, the  
+receiving process must match the data recipient, and the pattern matching of the  
+\textit{receive} must correspond to the sent data. Transitions for \textit{send} and  
+\textit{receive} that are ``empty" (i.e., messages that are sent but not processed by a  
+\textit{receive} in any process) will not be shown in the global automaton.
 
 \begin{figure}[ht!]
     \centering
@@ -237,7 +237,7 @@ Per l'invio e la ricezione di messaggi, durante la simulazione degli attori, se 
       
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {ProcSender$_n\to$ ProcRecv$_m$ : message} (n_2);
     \end{tikzpicture}
-    \caption{Grafo globale per \texttt{receive} e \texttt{!}}
+    \caption{Global view graph for \texttt{receive} and \texttt{!} keywords}
     \label{grafo:sendrecv}
 \end{figure}
 

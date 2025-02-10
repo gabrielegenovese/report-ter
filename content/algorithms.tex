@@ -1,23 +1,16 @@
-\paragraph{Execution} L'esecuzione \`e divisa in 3 fasi principali:
+Execution is divided into 3 main phases:
 \begin{enumerate}
-    \item inizializzazione del \texttt{db\_manager}, delle strutture dati e estrazione delle informazioni preliminari (se ne occupa il modulo \texttt{metadata.erl}): vengono estratti i possibili attori dall'attributo \texttt{export}, vengono contate quante \texttt{spawn} vengono eseguite e vengono salvati gli AST di tutte le funzioni nel \texttt{db\_manager}. Nel mentre, viene effettuata una prima valutazione del flusso del programma, inizializzando i nomi degli attori e salvando i passaggi degli argomenti alle \texttt{spawn};
-    
-    \item creazione delle viste locali di tutti i possibili attori, cio\`e di tutte le funzioni che compaiono nell'\texttt{export} all'inizio di un programma (ottenuti dalla prima fase);
-    
-    \item creazione della vista globale a partire dal punto di inizio del programma e componendo le viste locali create nella fase due.
+    \item Initialization of the \texttt{db\_manager}, data structures, and extraction of preliminary information (handled by the \texttt{metadata.erl} module): possible actors are extracted from the \texttt{export} attribute, the number of \texttt{spawn} executions is counted, and the ASTs of all functions are saved in the \texttt{db\_manager}. Meanwhile, an initial evaluation of the program flow is performed by initializing the names of actors and saving the argument passing to the \texttt{spawn} functions.
+    \item Creation of local views for all possible actors, i.e., all functions that appear in the \texttt{export} at the beginning of a program (obtained from the first phase).
+    \item Creation of the global view starting from the program's starting point and combining the local views created in phase two.
 \end{enumerate}
 
-\paragraph{Modulo \texttt{local\_view.erl}}
 
-Nel modulo che crea viste locali, la funzione principale \`e \texttt{eval\_codeline}. La funzione valuta la singola linea di codice e i suoi argomenti. Inoltre, aggiunge nodi al grafo della vista locale nel caso dei costrutti di comunicazione. La funzione crea un legame tra una variabile e il suo contenuto, se valutabili. Inoltre, crea biforcazioni con archi $\epsilon$ nel caso di \texttt{if} e \texttt{case}. In seguito, le transizioni $\epsilon$ verranno eliminate tramite la minimizzazione del grafo. Sono anche presenti alcune valutazioni di funzioni \textit{built-in} utili per la comunicazione, come \texttt{self()} che restituisce l'id del proprio processo e \texttt{register} che registra l'id di un processo in un \textit{atom}.
+\paragraph{Module \texttt{local\_view.erl}}
+In the module that creates local views, the main function is \texttt{eval\_codeline}. This function evaluates the individual line of code and its arguments. It also adds nodes to the local view graph in the case of communication constructs. The function creates a binding between a variable and its content, if evaluable. Additionally, it creates branches with $\epsilon$ edges in the case of \texttt{if} and \texttt{case}. Later, the $\epsilon$ transitions will be eliminated through graph minimization. There are also some evaluations of useful \textit{built-in} functions for communication, such as \texttt{self()} which returns the ID of its own process and \texttt{register} which registers a process ID in an \textit{atom}.
+Below is the pseudocode of some interesting branches.
 
-\bigskip
-
-\noindent Di seguito, ne mostriamo lo pseudo codice di alcuni rami interessanti.
-
-\bigskip
-
-\begin{lstlisting}[language=Erlang, caption=Codice di \texttt{eval\_codeline}, label=code:eval]
+\begin{lstlisting}[language=Erlang, caption=Pseudocode of \texttt{eval\_codeline} function, label=code:eval]
 eval_codeline(CodeLine, FunctionName, UsefulData) ->
     case CodeLine of
         %%% Eval recursive call
@@ -53,22 +46,19 @@ eval_codeline(CodeLine, FunctionName, UsefulData) ->
     end.
 \end{lstlisting}
 
-\textbf{N.B.}: in Erlang, difficilmente si specifica da quale processo si vuole ricevere un determinato messaggio perch\'e non si sa a priori quali attori ci sono. Di conseguenza, la vista globale user\`a l'etichetta \texttt{receive msg} per esprimere il ramo dove si riceve uno specifico messaggio. Verranno anche specificati i pattern matching, valutando dove \`e possibile, per facilitare la creazione della vista globale.
+\textbf{N.B.}: In Erlang, it is rare to specify from which process you want to receive a particular message because it is not known in advance which actors are present. Therefore, the global view will use the label \texttt{receive msg} to express the branch where a specific message is received. Pattern matching will also be specified, evaluating where possible, to facilitate the creation of the global view.
 
-\bigskip
+In section \ref{sec:corrisp}, the correspondence between code and graph for constructs that modify the local view will be explicitly stated. Instead, the branches corresponding to data types or \textit{built-in} functions (like \texttt{self()}) return a data structure representing the data, which will either be bound to a variable in the \texttt{match} branch or passed as an argument to a function.
 
-Nella sezione \ref{sec:corrisp} sar\`a esplicitata la corrispondenza tra codice e grafo per i costrutti che modificano la vista locale. Invece, i rami che corrispondono ai tipi dei dati o alle funzioni \textit{built-in} (come \texttt{self()}) ritornano una struttura dati che rappresenta il dato, che eventualmente sar\`a legata ad una variabile nel ramo \texttt{match} oppure sar\`a passata in una funzione come argomento.
+\paragraph{Module \texttt{global\_view.erl}}
 
-\paragraph{Modulo \texttt{global\_view.erl}}
-Se per creare una vista locale basta seguire il codice della funzione linea per linea, nella vista globale bisogna comporre le viste locali tenendo conto dei vari attori creati. Di conseguenza verr\`a simulata una esecuzione approssimata a partire dalla funzione di avvio. Ad ogni attore verr\`a associato un processo della funzione \texttt{proc\_loop}, che mantiene le informazioni sui rami disponibili e in quale stato si trova questo processo. Questa funzione si occupa di fornire al processo principale alcune informazioni relative all'attore.
+While creating a local view simply involves following the function code line by line, in the global view, we need to compose the local views while taking into account the various actors created. Therefore, an approximate execution will be simulated starting from the startup function. Each actor will be associated with a process of the \texttt{proc\_loop} function, which keeps track of available branches and the state of the process. This function is responsible for providing the main process with some information related to the actor.
 
-\bigskip
-
-\begin{lstlisting}[language=Erlang, caption=Funzione \texttt{proc\_loop} che simula un attore]
+\begin{lstlisting}[language=Erlang, caption=Pseudocode of \texttt{proc\_loop} function]
 proc_loop(LocalView, CurrentState, MarkedEdges) ->
     receive
         {use_transition, Edge} ->
-            % per evitare loop infiniti
+            % to avoid infinite loops
             NewState = verify_not_marked();
             proc_loop(LocalView, NewState, MarkedEdges);
         {P, get_info} ->
@@ -78,17 +68,11 @@ proc_loop(LocalView, CurrentState, MarkedEdges) ->
     end.
 \end{lstlisting}
 
-\bigskip
+Furthermore, messages could travel either within the same virtual machine or across the network, so message exchange occurs asynchronously. That is, if two sends, $A$ and $B$, are made to the same process, either $A$ or $B$ could arrive first, completely changing the execution flow of the program.
 
-Inoltre, i messaggi potrebbero viaggiare sulla stessa macchina virtuale o attraverso la rete, quindi lo scambio di messaggi avviene in modo totalmente \textit{asincrono}, cio\`e se vengono effettuate due send $A$ e $B$ verso lo stesso processo, potrebbe arrivare prima $A$ o $B$ e cambiare completamente l'esecuzione del programma.
+In the following code \ref{code:global}, the main function of the \texttt{global\_view.erl} module is presented, which creates the global view by combining actors and their local views. The basic idea is to create a \textit{depth-first view} (DFS) of the actor automata, stopping appropriately according to the communication rules.
 
-\bigskip
-
-Nel seguente codice \ref{code:global}, \`e presente la funzione principale del modulo \texttt{global\_view.erl}, che crea la vista globale combinando gli attori e le loro viste locali. L'idea di base \`e quella di creare una \textit{vista in profondit\`a} (in inglese Depth-first search, DFS) degli automi degli attori, fermandosi in modo opportuno secondo le regole di comunicazione.
-
-\bigskip
-
-\begin{lstlisting}[language=Erlang, caption=Codice principale per costruire una vista globale, label=code:global]
+\begin{lstlisting}[language=Erlang, caption=Main function for globalview construction, label=code:global]
 progress_branches(BranchList) ->
     NewBranchList = lists:foreach(
         fun(Item) -> progress_single_branch(Item) end,
@@ -108,16 +92,10 @@ progress_single_branch(Data) ->
     ).
 \end{lstlisting}
 
-La strategia di composizione delle viste locali che viene adottata \`e quella di far proseguire tutti gli attori fino a una qualsiasi \textit{send} (riga 3 del codice \ref{code:global}). Mentre viene cercata e trovata la prima \textit{send}, vengono anche cercate \textit{spawn} e \textit{receive}. Se si incontra una spawn, viene subito aggiunto il corrispettivo nodo nel grafo e creato l'attore. Invece, se viene incontrata una \textit{receive}, si controlla la coda dei messaggi del processo. Se ne viene trovata una compatibile, allora si crea la transizione sul grafo e i due attori proseguiranno l'esecuzione.
+The strategy for composing local views is to have all actors continue until any \textit{send} (line 3 of code \ref{code:global}). While searching for and finding the first \textit{send}, \textit{spawn} and \textit{receive} are also searched. If a \textit{spawn} is encountered, the corresponding node is immediately added to the graph, and the actor is created. If a \textit{receive} is encountered, the message queue of the process is checked. If a compatible message is found, a transition is created on the graph, and the two actors continue execution.
 
-\bigskip
+After being blocked on a \textit{send} or \textit{receive}, processes will be duplicated on different branches for different executions (line 14 of code \ref{code:global}). Each "branch" of execution will differ depending on which \textit{send} is evaluated first. At the same time, a check is performed to see if a process is available to receive that message. If so, a transition is created on the global graph, and the actors continue. Otherwise, the "vacant" \textit{send} is inserted into an appropriate data structure.
 
-I processi, dopo essere stati bloccati su una \textit{send} o \textit{receive}, varranno duplicati su rami diversi per esecuzioni diverse (riga 14 del codice \ref{code:global}). Ogni ``ramo" dell'esecuzione differir\`a in base a quale \textit{send} valutare prima. Contemporaneamente, viene controllato se \`e presente un processo che pu\`o ricevere quel messaggio. In caso affermativo, viene creata la transizione sul grafo globale e vengono fatti proseguire gli attori. Altrimenti, la \textit{send} ``vacante" viene inserita in una struttura dati opportuna.
+The algorithm in \ref{code:global} is executed recursively until a relevant data structure is modified (such as the graph). On the first iteration that does not modify any data structure, the algorithm stops. The final graph will represent the communication that occurred asynchronously for messages sent from different actors. Examples of "branching" between \textit{send}s are shown in the example section.
 
-\bigskip
-
-L'algoritmo \ref{code:global} viene eseguito ricorsivamente finch\'e una struttura dati rilevante viene modificata (come il grafo). Alla prima iterazione che non modifica nessuna struttura dati, l'algoritmo si fermer\`a. Il grafo finale rappresenter\`a la comunicazione avvenuta in modo asincrono per i messaggi che partono da diversi attori. Vengono fatti esempi di ``diramazioni" tra \textit{send} nella sezione degli esempi.
-
-\bigskip
-
-Ogni modulo, dopo aver creato i rispettivi automi, si occuper\`a di convertirli in linguaggio DOT e salvarli su file. Per visualizzare i grafi baster\`a copiare il contenuto del file su un applicativo che interpreta il formato DOT.
+Each module, after creating their respective automata, will be responsible for converting them into DOT language and saving them to a file. To visualize the graphs, simply copy the contents of the file into an application that interprets the DOT format.
