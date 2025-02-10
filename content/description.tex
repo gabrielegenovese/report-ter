@@ -110,15 +110,15 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       \node[state] (n_1) {1};
       \node[state] (n_2) [above right of=n_1] {2};
       \node[state] (n_4) [below right of=n_1] {$n$};
-      \node[state] (n_3) [below=\distance cm of n_2] {\ldots};
+      \node[state] (n_3) [below=1.1\distance cm of n_2] {\ldots};
       \node[state] (n_5) [right of=n_2] {\ldots};
       \node[state] (n_6) [right of=n_3] {\ldots};
       \node[state] (n_7) [right of=n_4] {$m$};
       \node[state] (n_8) [below right of=n_5] {$m+1$};
       
-      \draw[->] (n_1) -- node[midway, above left, pos=0.6] {receive message1} (n_2);
+      \draw[->] (n_1) -- node[midway, above left, pos=0.6] {0\#receive message1} (n_2);
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {...} (n_3);
-      \draw[->] (n_1) -- node[midway, below left, pos=0.6] {receive messageN} (n_4);
+      \draw[->] (n_1) -- node[midway, below left, pos=0.6] {N\#receive messageN} (n_4);
       \draw[->] (n_2) -- node[midway, above, pos=0.5] {...} (n_5);
       \draw[->] (n_3) -- node[midway, above, pos=0.5] {...} (n_6);
       \draw[->] (n_4) -- node[midway, above, pos=0.5] {...} (n_7);
@@ -139,7 +139,7 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {ProcSent ! message} (n_2);
     \end{tikzpicture}
-    \caption{Localview graph for the \texttt{!} keyword}
+    \caption{Localview graph for \texttt{!} keyword}
     \label{grafo:send}
 \end{figure}
 

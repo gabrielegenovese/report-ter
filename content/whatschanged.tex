@@ -7,8 +7,60 @@
 \input{content/account}
 
 \subsubsection{Feature}
+During this period, various features have been added to the tool:
+\begin{itemize}  
+    \item \textbf{Improved over-approximation in the global view}:  
+    If, during computation, the value of some data is lost, the tool now  
+    uses the \texttt{ANY} constant to indicate that it can represent any kind  
+    of data. If a message is exchanged with \texttt{ANY} as its content, it  
+    will match every possible receive branch, ensuring a more comprehensive  
+    analysis.  
+    
+    \item \textbf{Basic value passing in the local view}:  
+    The tool can now correctly parse programs where values are passed as  
+    arguments to functions, allowing for a more accurate representation of  
+    data flow between processes.  
+    
+    \item \textbf{Enhanced error handling}:  
+    The tool is now more resilient to unexpected errors, reducing the  
+    likelihood of crashes and ensuring that it provides meaningful output in  
+    most cases, even when encountering invalid input.  
+    
+    \item \textbf{Improved CLI experience}:  
+    A new library has been integrated for command-line argument management,  
+    making the CLI more robust and user-friendly, with better parsing of  
+    parameters and improved error messages.  
+
+    \item \textbf{Improved testing environment and benchmark generation}:  
+    The tool now produces useful benchmarking information, which is processed  
+    by a dedicated Python script. This script collects and analyzes the data  
+    to generate meaningful performance benchmarks. Additionally, if the  
+    \texttt{correct\_gv.dot} file is present—containing the expected global  
+    view—the script performs an automatic correctness check. This feature  
+    lays the groundwork for more expressive and rigorous testing in the future,  
+    enabling better validation of the tool's accuracy and performance across  
+    different scenarios.  
+
+\end{itemize}
 
 \subsubsection{Bug Fix}
+All of these improvements are made within the global view module:  
+\begin{itemize}  
+    \item \textbf{Fixed a bug causing false positive warnings}:  
+    Resolved an issue where the tool incorrectly printed warnings about  
+    failing to find the correct process during the emulation of a global view.  
+    
+    \item \textbf{Fixed a bug preventing full branch exploration}:  
+    Addressed a problem that prevented the exploration of certain branches  
+    during the global view emulation, ensuring a more comprehensive traversal  
+    of all possible execution paths.  
+    
+    \item \textbf{Fixed a bug causing excessive duplicate branches}:  
+    Corrected an issue where unnecessary duplicate branches were created  
+    after receiving a message and defining a new variable. This fix improves  
+    the accuracy of the global view by reducing redundant computations.  
+\end{itemize}  
+
 
 \subsubsection{Benchmarks}
 \input{content/benchmarks}
