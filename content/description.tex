@@ -1,6 +1,13 @@
-
 \paragraph{How to use the tool}
-The tool can be used from the command line interface (CLI). It can be used by compiling each module from the Erlang Shell (Eshell) or, more conveniently, by using \texttt{rebar3}, a standard build tool that provides various features such as package management for community-created libraries, compilation, and automated project testing. By cloning the project from the public GitHub repository and running the \texttt{rebar3 escriptize} command in the main directory, \texttt{rebar3} will, in this order, check for and download dependencies if needed, compile the project, and run tests if present. After that, an executable can be used in \texttt{./\_build/default/bin/chorer}.
+The tool can be used from the command line interface (CLI). It can be used by
+compiling each module from the Erlang Shell (Eshell) or, more conveniently, by
+using \texttt{rebar3}, a standard build tool that provides various features
+such as package management for community-created libraries, compilation, and
+automated project testing. By cloning the project from the public GitHub
+repository and running the \texttt{rebar3 escriptize} command in the main
+directory, \texttt{rebar3} will, in this order, check for and download
+dependencies if needed, compile the project, and run tests if present. After
+that, an executable can be used in \texttt{./\_build/default/bin/chorer}.
 
 \begin{lstlisting}[caption=Usage message]
 Usage:
@@ -9,7 +16,7 @@ Usage:
 Extract a choreography automata of an Erlang program.
 
 Arguments:
-  input      Erlang soure file (string)
+  input      Erlang source file (string)
   entrypoint Entrypoint of the program (atom)
   output     Output directory for the generated dot files (string), default: ./
   ming       Minimize the globalviews , default: false
@@ -19,14 +26,28 @@ Arguments:
 
 \noindent The mandatory arguments are:
 \begin{itemize}
-    \item \textbf{Input}: The relative path string of the input Erlang program, from which the tool will generate local and global views.
-    \item \textbf{Entrypoint}: The atom representing the function where the execution of the input program begins. This parameter is essential because Erlang does not have a conventional entry point function (i.e. the main in C, but in Erlang can be every exported function). It will be passed to the function that creates the global view to start the simulation.
+    \item \textbf{Input}: The relative path string of the input Erlang program,
+    from which the tool will generate local and global views.
+    \item \textbf{Entrypoint}: The atom representing the function where the
+    execution of the input program begins. This parameter is essential because
+    Erlang does not have a conventional entry point function (i.e. the main in C,
+    but in Erlang can be every exported function). It will be passed to the
+    function that creates the global view to start the simulation.
 \end{itemize}
 
 \noindent The optional arguments are:
 \begin{itemize}
-    \item \textbf{Output}: The relative path string of the output folder where the local and global view files will be saved. Local views will be named \texttt{[function name with arity]\_local\_view.dot}, while the global view file will be named \texttt{[Entrypoint]\_global\_view.dot}.
-    \item \textbf{Options}: Currently, this is a tuple of two booleans that allow customization of local views. The first boolean determines whether to identify final states (by default, it is set to true). The second adds more information to the local view by including transitions related to other language constructs in addition to communication constructs (by default, it is set to false). This parameter may be expanded in the future with additional booleans.
+    \item \textbf{Output}: The relative path string of the output folder where
+    the local and global view files will be saved. Local views will be named
+    \texttt{[function name with arity]\_local\_view.dot}, while the global view
+    file will be named \texttt{[Entrypoint]\_global\_view.dot}.
+    \item \textbf{Options}: Currently, this is a tuple of two booleans that
+    allow customization of local views. The first boolean determines whether to
+    identify final states (by default, it is set to true). The second adds more
+    information to the local view by including transitions related to other
+    language constructs in addition to communication constructs (by default, it
+    is set to false). This parameter may be expanded in the future with
+    additional booleans.
 \end{itemize}
 
 \begin{lstlisting}[language=Erlang, caption=Use example of the tool]
@@ -69,20 +90,26 @@ is located in the \texttt{src} folder.
 
 \bigskip
 
-The main file is \texttt{chorer\_app.erl}, which contains the \texttt{main} function.  
-The file \texttt{rebar.config}, \texttt{rebar.lock}, and \texttt{chorer.app.src} are required for running the tool with \texttt{rebar3}.  
-The \texttt{choreography} folder contains modules responsible for the static analysis of the program and the creation of local and global views. Specifically:  
+The main file is \texttt{chorer\_app.erl}, which contains the \texttt{main}
+function. The file \texttt{rebar.config}, \texttt{rebar.lock}, and
+\texttt{chorer.app.src} are required for running the tool with \texttt{rebar3}.
+The \texttt{choreography} folder contains modules responsible for the static
+analysis of the program and the creation of local and global views. Specifically:
+
 \begin{itemize}  
-    \item \texttt{actor\_emul.erl}: manage the emulation of an actor during the globalview creating.
+    \item \texttt{actor\_emul.erl}: manages the emulation of an actor during the
+    globalview creation.
     \item \texttt{eval.erl}: helps the localview generation.  
     \item \texttt{gv.erl}: generates the globalview.  
     \item \texttt{lv.erl}: generates the localviews.  
     \item \texttt{md.erl}: manages the extraction of preliminary data.  
-  \end{itemize}  
+\end{itemize}  
 
-\noindent The \texttt{share} folder contains shared functions for all modules, including:  
+\noindent The \texttt{share} folder contains shared functions for all modules,
+including:  
 \begin{itemize}  
-  \item \texttt{common\_data.erl}: header file where the main data structures are defined.  
+  \item \texttt{common\_data.erl}: header file where the main data structures
+  are defined.  
   \item \texttt{db.erl}: manages the common information used during the creation
   of both local and global view.  
   \item \texttt{digraph\_to\_dot.erl}: converts a graph into DOT format.  
@@ -90,7 +117,7 @@ The \texttt{choreography} folder contains modules responsible for the static ana
   \item \texttt{log.erl}: manages the logging of messages.  
   \item \texttt{settings.erl}: manages the settings of the program.  
   \item \texttt{share.erl}: handles file saving and shared function.  
-\end{itemize}  
+\end{itemize}
 
 \subsubsection{From Erlang to Choreographies}
 \label{sec:corrisp}
@@ -247,7 +274,17 @@ receiving process must match the data recipient, and the pattern matching of the
 
 \paragraph{Old state}
 
-The tool can accurately parse the main constructs and features of the Erlang language. In Table \ref{erl}, we outline the current status: what is supported, what is not supported, and what are the next objectives. It was decided not to support certain constructs because they are not useful at this stage of the project. For example, supporting error handling with try-catch is unnecessary when variable passing is not yet implemented. Additionally, some constructs were excluded because they are orthogonal to others, such as complex data structures. The tool generates a local view that closely aligns with the behavior of the original actor, and the algorithm for combining local views into a global view performs well on simple examples. However, at present, it does not provide automatic error detection for certain properties in the global choreography.
+The tool can accurately parse the main constructs and features of the Erlang 
+language. In Table \ref{erl}, we outline the current status: what is supported, 
+what is not supported, and what are the next objectives. It was decided not to 
+support certain constructs because they are not useful at this stage of the 
+project. For example, supporting error handling with try-catch is unnecessary 
+when variable passing is not yet implemented. Additionally, some constructs were
+excluded because they are orthogonal to others, such as complex data structures. 
+The tool generates a local view that closely aligns with the behavior of the 
+original actor, and the algorithm for combining local views into a global view
+performs well on simple examples. However, at present, it does not provide 
+automatic error detection for certain properties in the global choreography.
 
 % \begin{table}[!ht]
 %     \centering

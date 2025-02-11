@@ -1,0 +1,165 @@
+To better understand how the parsing of a file and the creation of a localview 
+should work, we created an attributed grammar for a subset of the Erlang language.
+An attributed grammar extends a context-free grammar by associating attributes with 
+its symbols and defining semantic rules. Attributes can be \textit{synthesized} (computed 
+from child nodes) or \textit{inherited} (passed from parent nodes). These rules define how 
+information propagates through the parse tree. In the following attributed grammar, 
+we define the localview of Chorer's constructs.
+
+\paragraph{Program}
+
+$prog \to (funPattern)^+$
+
+A program doesn't have a local-view, no need to write attributes.
+
+\paragraph{Function 
+}
+\paragraph{List}
+
+$funList \to (funPattern)^+$
+
+We create only the local-views that we need.
+
+\paragraph{Pattern}
+
+Base case: $funPattern \to fun.$ (trivial)
+
+$funPattern \to fun_1;...;fun_N.$
+
+\begin{verbatim}
+funPattern.nodes = new U fun1.nodes U ... U funN.nodes
+funPattern.edges = link(new,fun1.first) U ... U 
+                   link(new,funN.first) U 
+                   fun1.edges U ... U funN.edges
+funPattern.first = new
+\end{verbatim}
+
+\paragraph{Body}
+
+$fun \to Atom(X_1,...,X_n) \to Exprs$
+
+Attributes:
+\begin{verbatim}
+fun.nodes = new U Exprs.nodes
+fun.edges = Exprs.edges U link(new, E.first)
+fun.first = new
+fun.last = Exprs.last
+fun.context = [ X1 -> Param[1], ..., Xn -> Param[n] ]
+fun.ret_var = E.ret_var
+\end{verbatim}
+
+\texttt{Param} is taken as input (default to \texttt{ANYDATA})
+
+\paragraph{Expressions}
+
+\paragraph{Concatenation}
+
+Base case: $Exprs \to expr$ (trivial)
+
+$Exprs \to expr,Exprs'$
+
+Attributes:
+\begin{verbatim}
+Exprs.nodes = expr.nodes U Exprs'.nodes
+Exprs.edges = expr.edges 
+              U Exprs'.edges 
+              U link(expr.last, Exprs'.first, epsilon)
+Exprs.first = expr.first
+Exprs.last = Exprs'.last
+Exprs.context = expr.context U Exprs'.context
+Exprs.ret_var = Exprs'.ret_var
+\end{verbatim}
+
+\paragraph{Send}
+
+$expr \to expr'\ \ !\ \ expr''$
+
+Attributes:
+\begin{verbatim}
+expr.nodes = expr'.nodes U expr''.nodes U new1 U new2
+expr.edges = expr'.edges U expr''.edges
+             U link(expr''.last, new1, epsilon)
+             U link(new1, new2, expr'.ret_var 
+                + " ! " 
+                + expr''.ret_var)
+expr.first = expr'.first
+expr.last = new2
+expr.context = expr'.context U expr''.context
+expr.ret_var = expr''.ret_var
+\end{verbatim}
+
+Firstly evaluate the left-hand side expression, then the right hand side one. 
+Lastly insert the sends edge.
+
+\paragraph{Receive}
+
+$expr \to receive patter_1 \to Exprs_1; ...; pattern_n \to Exprs_n end$
+
+Attributes:
+\begin{verbatim}
+expr.first = new1
+expr.last = new2
+expr.nodes = Exprs1.nodes U ... U Exprsn.nodes U new1 U new2
+expr.edges = Exprs1.edges U ... U Exprsn.edges
+             U link(new1, Exprs1.first, epsilon) 
+             U ...
+             U link(new1, Exprsn.first, epsilon)
+             U link(Exprs1.last, new2, epsilon)
+             U ...
+             U link(Exprsn.last, new2, espilon)
+expr.ret_var = ANYDATA (overapprox)
+context?
+\end{verbatim}
+
+\paragraph{Spawn call}
+
+$expr \to spawn(Atom, Params)$
+
+Attributes:
+\begin{verbatim}
+expr.nodes = new1 U new2
+expr.edges = link(new1, new2, "spawn Atom")
+expr.first = new1
+expr.last = new2
+expr.ret_var = newVar(type: pid, value: random) 
+\end{verbatim}
+
+\paragraph{Recursive call}
+
+$expr \to FunName(Params)$
+
+Attributes:
+\begin{verbatim}
+expr.edges = expr.edges U link(FunName.first, expr.last)
+expr.ret_var = null
+\end{verbatim}
+
+Use of inherited attributes
+Stop evaluation
+
+\paragraph{Generic function call} 
+
+$expr \to Atom(Params)$
+
+Attributes:
+\begin{verbatim}
+G = get_localview(Atom, Param)
+expr.nodes = G.nodes
+expr.edges = G.edges
+expr.first = G.first
+expr.last = G.last
+expr.ret_var = G.ret_var 
+\end{verbatim}
+
+\paragraph{Assignment}
+
+$expr \to pattern = expr'$
+
+Attributes:
+\begin{verbatim}
+expr.nodes = expr'.nodes
+expr.edges = expr'.edges
+expr.first = expr'.first
+expr.last = expr'.last
+expr.context = [pattern -> expr'.ret_var]
+\end{verbatim}
