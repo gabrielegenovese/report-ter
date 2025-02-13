@@ -10,42 +10,6 @@ Execution is divided into 3 main phases:
 In the module that creates local views, the main function is \texttt{eval\_codeline}. This function evaluates the individual line of code and its arguments. It also adds nodes to the local view graph in the case of communication constructs. The function creates a binding between a variable and its content, if evaluable. Additionally, it creates branches with $\epsilon$ edges in the case of \texttt{if} and \texttt{case}. Later, the $\epsilon$ transitions will be eliminated through graph minimization. There are also some evaluations of useful \textit{built-in} functions for communication, such as \texttt{self()} which returns the ID of its own process and \texttt{register} which registers a process ID in an \textit{atom}.
 Below is the pseudocode of some interesting branches.
 
-\begin{lstlisting}[language=Erlang, caption=Pseudocode of \texttt{eval\_codeline} function, label=code:eval]
-eval_codeline(CodeLine, FunctionName, UsefulData) ->
-    case CodeLine of
-        %%% Eval recursive call
-        {call, _, {atom, _, FunctionName}, ArgList} ->
-            manage_recursive_call();
-        %%% Evaluate the spawn function
-        {call, _, {atom, _, spawn}, ArgList} ->
-            add_spawn_to_local_view();
-        %%% Evaluate a call to a generic function
-        {call, _, {atom, _, Name}, ArgList} ->
-            manage_call();
-        %%% Eval Var = something
-        {match, _, RightContent, LeftContent} ->
-            manage_var();
-        %%% Evaluate case with pattern matching
-        {'case', _, Data, PMList} ->
-            manage_case();
-        %%% Evaluate if like case
-        {'if', _, PMList} ->
-            manage_if();
-        %%% Evaluate receive with pattern matching
-        {'receive', _, PMList} ->
-            add_receive_to_local_view();
-        %%% Evaluate send
-        {op, _, '!', ProcSent, DataSentAst} ->
-            add_send_to_local_view();
-        %%% Evaluate data types
-        {atom, _, Value} -> return_var();
-        {integer, _, Value} -> return_var();
-        {string, _, Value} -> return_var();
-        ...
-        _ -> nomatch
-    end.
-\end{lstlisting}
-
 \textbf{N.B.}: In Erlang, it is rare to specify from which process you want to receive a particular message because it is not known in advance which actors are present. Therefore, the global view will use the label \texttt{receive msg} to express the branch where a specific message is received. Pattern matching will also be specified, evaluating where possible, to facilitate the creation of the global view.
 
 In section \ref{sec:corrisp}, the correspondence between code and graph for constructs that modify the local view will be explicitly stated. Instead, the branches corresponding to data types or \textit{built-in} functions (like \texttt{self()}) return a data structure representing the data, which will either be bound to a variable in the \texttt{match} branch or passed as an argument to a function.
@@ -94,7 +58,7 @@ progress_single_branch(Data) ->
 
 The strategy for composing local views is to have all actors continue until any \textit{send} (line 3 of code \ref{code:global}). While searching for and finding the first \textit{send}, \textit{spawn} and \textit{receive} are also searched. If a \textit{spawn} is encountered, the corresponding node is immediately added to the graph, and the actor is created. If a \textit{receive} is encountered, the message queue of the process is checked. If a compatible message is found, a transition is created on the graph, and the two actors continue execution.
 
-After being blocked on a \textit{send} or \textit{receive}, processes will be duplicated on different branches for different executions (line 14 of code \ref{code:global}). Each "branch" of execution will differ depending on which \textit{send} is evaluated first. At the same time, a check is performed to see if a process is available to receive that message. If so, a transition is created on the global graph, and the actors continue. Otherwise, the "vacant" \textit{send} is inserted into an appropriate data structure.
+After being blocked on \textit{send} or \textit{receive}, processes will be duplicated on different branches for different executions (line 14 of code \ref{code:global}). Each "branch" of execution will differ depending on which \textit{send} is evaluated first. At the same time, a check is performed to see if a process is available to receive that message. If so, a transition is created on the global graph, and the actors continue. Otherwise, the "vacant" \textit{send} is inserted into an appropriate data structure.
 
 The algorithm in \ref{code:global} is executed recursively until a relevant data structure is modified (such as the graph). On the first iteration that does not modify any data structure, the algorithm stops. The final graph will represent the communication that occurred asynchronously for messages sent from different actors. Examples of "branching" between \textit{send}s are shown in the example section.
 

@@ -72,9 +72,15 @@
 
 
 \section*{Abstract}
-The recent development of concurrent and distributed applications has raised new interest in programming paradigms incorporating threads and message passing into their logic. The use of choreographies
+The recent development of concurrent and distributed applications has raised new
+interest in programming paradigms incorporating threads and message passing into
+their logic. The use of choreographies
 %which are behavioral types, 
-can ensure some typical properties of concurrent systems (such as liveness, lock freedom and deadlock freedom). ChorEr is a preliminary static analysis tool for a fragment of Erlang programs that generates choreography automata. We plan to build on the existing tool to implement new functionalities and cover more primitives, thus extending the expressiveness of the language under consideration.
+can ensure some typical properties of concurrent systems (such as liveness, lock
+freedom and deadlock freedom). ChorEr is a preliminary static analysis tool for
+a fragment of Erlang programs that generates choreography automata. We plan to
+build on the existing tool to implement new functionalities and cover more
+primitives, thus extending the expressiveness of the language under consideration.
 
 \newpage
 
@@ -97,12 +103,6 @@ can ensure some typical properties of concurrent systems (such as liveness, lock
 \subsection{Challenges}
 \input{introduction/challenges}
 
-% \subsection{Choreographies} %% trasferito in theory
-% \input{introduction/choreography}
-
-\subsection{State of the Art}
-\input{introduction/sota}
-
 \section{Chorer}
 \input{content/chorer}
 
@@ -112,14 +112,31 @@ can ensure some typical properties of concurrent systems (such as liveness, lock
 \subsection{Description of the tool}
 \input{content/description}
 
-\subsection{What's changed}
-\input{content/whatschanged}
+\section{Contributions}
+\subsection{Attributed grammar}
+\input{content/attributed}
+
+\subsection{Improvements on the tool}
+\input{content/improvements}
+
+\subsection{Benchmarks}
+\input{content/benchmarks}
+
+
+\section{Case studies}
+\input{content/casestudies}
+\subsection{Dinning philosophers}
+\input{content/dining}
+\subsection{Bank account}
+\input{content/account}
 
 \section{Conclusion}
 \input{conclusion}
 
 \subsection{Related works}
 \input{rw}
+\subsection{State of the Art}
+\input{introduction/sota}
 
 \newpage
 
