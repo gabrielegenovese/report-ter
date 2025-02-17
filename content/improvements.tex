@@ -1,53 +1,66 @@
+One key goal of the tool is to generate correct graph outputs, ensuring an  
+accurate representation of program behavior. While refining abstract aspects  
+of the project, several features, improvements, and bug fixes have been added  
+to enhance the precision and consistency of the global view specification. The  
+iterative process of refining the tool aims to minimize errors, and provide a
+more reliable emulation of  actor-based execution. Future work will continue to
+focus on refining these aspects to offer greater 
+flexibility while maintaining correctness of the analyzed program.
 
-During this period, various features have been added to the tool:
-\begin{itemize}  
-    \item \textbf{Improved over-approximation in the global view}:  
-    If, during computation, the value of some data is lost, the tool now  
-    uses the \texttt{ANY} constant to indicate that it can represent any kind  
-    of data. If a message is exchanged with \texttt{ANY} as its content, it  
-    will match every possible receive branch, ensuring a more comprehensive  
-    analysis.  
-    
-    \item \textbf{Basic value passing in the local view}:  
-    The tool can now correctly parse programs where values are passed as  
-    arguments to functions, allowing for a more accurate representation of  
-    data flow between processes.  
-    
-    \item \textbf{Enhanced error handling}:  
-    The tool is now more resilient to unexpected errors, reducing the  
-    likelihood of crashes and ensuring that it provides meaningful output in  
-    most cases, even when encountering invalid input.  
-    
-    \item \textbf{Improved CLI experience}:  
-    A new library has been integrated for command-line argument management,  
-    making the CLI more robust and user-friendly, with better parsing of  
-    parameters and improved error messages.  
+\paragraph{Features}
+Two key features have been added to the tool. The first one improves the local  
+view module. The tool can now correctly parse programs where values are passed   
+as arguments to functions, allowing for a more precise representation of  
+data flow between processes. 
+Previously, only functions without value passing were supported. This was a
+significant limitation and, in fact, one of the highest-priority features.
+It was the final major feature of a programming language to be added, and it is 
+now included in the parsing module, enabling a broader range of program inputs.
 
-    \item \textbf{Improved testing environment and benchmark generation}:  
-    The tool now produces useful benchmarking information, which is processed  
-    by a dedicated Python script. This script collects and analyzes the data  
-    to generate meaningful performance benchmarks. Additionally, if the  
-    \texttt{correct\_gv.dot} file is present—containing the expected global  
-    view—the script performs an automatic correctness check. This feature  
-    lays the groundwork for more expressive and rigorous testing in the future,  
-    enabling better validation of the tool's accuracy and performance across  
-    different scenarios.  
+The second feature added to the tool enhances over-approximation
+in the global view module. During computation, the value of 
+some data can become everything because we cannot know the outcome of an 
+operation performed on the data (i.e. we don't support mathematical operation). 
+The tool now substitutes this unknown value with the \texttt{ANY} keyword to 
+indicate that it can represent any kind of data. If a message is exchanged with 
+\texttt{ANY} as its content, it will match every possible receive branch,
+ensuring a more over-approximated analysis of the program.
 
-\end{itemize}
+\paragraph{General improvements}
+Some general improvements have been made on the tool. 
+The tool is now more resilient to unexpected errors, reducing the  
+likelihood of crashes and ensuring that it provides meaningful output in  
+most cases, even when encountering invalid input. This was achieved through the
+implementation of more error checks and recovery patterns within the codebase, 
+where there were none before.
 
-This is a list of bug fix improvements that are made within the global view module:  
-\begin{itemize}  
-    \item \textbf{Fixed a bug causing false positive warnings}:  
-    Resolved an issue where the tool incorrectly printed warnings about  
-    failing to find the correct process during the emulation of a global view.  
-    
-    \item \textbf{Fixed a bug preventing full branch exploration}:  
-    Addressed a problem that prevented the exploration of certain branches  
-    during the global view emulation, ensuring a more comprehensive traversal  
-    of all possible execution paths.  
-    
-    \item \textbf{Fixed a bug causing excessive duplicate branches}:  
-    Corrected an issue where unnecessary duplicate branches were created  
-    after receiving a message and defining a new variable. This fix improves  
-    the accuracy of the global view by reducing redundant computations.  
-\end{itemize}  
+Also, a new library has been integrated for command-line argument management,  
+making the CLI more robust and user-friendly, with better parsing of  
+parameters and improved error messages.
+
+Some effort has been put to improve the testing environment and benchmark 
+generation. The tool now produces useful benchmarking information, which is 
+processed by a dedicated Python script. This script collects and analyzes the 
+data to generate meaningful performance benchmarks. Additionally, if the  
+\texttt{correct\_gv.dot} file is present (that is a dot file containing 
+the expected global view) the script performs an automatic correctness check. 
+This feature lays the groundwork for more expressive and rigorous testing in 
+the future, enabling better validation of the tool's accuracy and performance
+across different scenarios and use cases.
+
+\paragraph{Bug fixes}
+Some notable bug fix improvements were made within the global view module that 
+are needed to be mentioned. It has been resolved an issue where the tool
+incorrectly printed warnings about failing to find the correct process during
+the sending of a message. This bug caused the useless show of some false 
+positive warnings. 
+
+It also has been addressed a problem that prevented the exploration of certain
+branches during the global view emulation, ensuring a more comprehensive
+traversal of all possible execution paths. This bug prevented a full branch
+exploration in certain programs. 
+
+It has been fixed a bug that was causing excessive duplicate branches. 
+This patch corrected an issue where unnecessary duplicate branches were created  
+after receiving a message and defining a new variable. This fix improves  
+the accuracy of the global view by reducing redundant computations.  
