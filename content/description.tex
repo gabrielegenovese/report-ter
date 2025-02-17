@@ -40,9 +40,12 @@ Arguments:
     the local and global view files will be saved. Local views will be named
     \texttt{[function name with arity]\_local\_view.dot}, while the global view
     file will be named \texttt{[Entrypoint]\_global\_view.dot}.
-    \item \textbf{Options}: other arguments are specific operation to perform
-    on the local view or the global view, i.e. produce in as output the
-    minimized version of a graph.
+    \item \textbf{Options}: Additional arguments define specific operations  
+    to perform on either the local or global view. For instance, they  
+    can be used to generate an optimized or minimized version of a  
+    graph as output. These options allow for greater flexibility in  
+    refining and analyzing the extracted views, enabling different 
+    meaningful representations.
 \end{itemize}
 
 \subsubsection{From Erlang to Choreographies}
@@ -226,7 +229,7 @@ philosophy. Each actor has a manager process that tracks available transitions
 and the process state (i.e., local variables). This function provides the main  
 process of the global view with actor-related information. Messages may travel  
 within the same virtual machine or across a network, making message exchange  
-asynchronous. If two sends, $A$ and $B$, target the same process, their order  
+asynchronous. If two sends target the same process, their order  
 is unpredictable, altering the program flow.  
 
 The global view creation algorithm follows an overapproximation approach,  
@@ -246,5 +249,5 @@ queue. After blocking on a \textit{receive}, possible messages are processed,
 creating a new execution path for each, adding new states to the global graph.  
 
 The algorithm runs recursively until a relevant state change occurs. When an  
-iteration fails to modify any actor's state, execution stops. The final graph  
-represents asynchronous communication among actors for messages exchanged.  
+iteration fails to modify any actor's state, the execution stops. The final graph  
+represents the asynchronous communication among actors for messages exchanged.  

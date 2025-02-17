@@ -1,7 +1,7 @@
-In order to better illustrate our point, we present in this section two examples (using Erlang-like, actor-based pseudocode), each one
+In order to better illustrate the features of the tool, we present in
+this section two examples (using Erlang-like, actor-based pseudocode), each one
 composed by a pseudocode and the corresponding Choreography
-Automaton~\cite{coordination2020-chorAuto} (a graphical way of
-representing a finite-state machine) of the global view of the
+Automata~\cite{coordination2020-chorAuto} of the global view of the
 communicating system. Here, a \emph{global view} is an abstract description of
 all the possible behaviors of the full system. We consider a language
 where receive statements are blocking operations. A state where each
@@ -10,19 +10,14 @@ state that is not final and has no outgoing transitions is a \emph{deadlock}.
 
 The first example is a concise reproduction of the dining philosophers
 problem, which highlights a possible deadlock. The second example
-shows a possible mutual exclusion error 
-when operating a simple bank account.
-%in a database.
-%
+shows a possible mutual exclusion error when operating a simple bank account.
 Both examples are available online~\cite{chorer_examples}; the
-corresponding automata have been obtained with the help of our prototype tool
-Chorer~\cite{chorer}.
+corresponding automata have been obtained with the tool.
 
 \lstset{language=erlang, basicstyle=\sffamily\footnotesize,
   keywordstyle=\color{blue}, numberstyle=\tiny, numbers=none,
   showspaces=false, showstringspaces=false, frame=tL,
   backgroundcolor=\color{black!5}, morekeywords={send, to, from} }
-
 
 In the examples, we exploit two operations for sending and receiving messages,
 respectively.

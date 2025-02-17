@@ -4,7 +4,7 @@ Notice that, the local view is limited and actors are unaware of the behavior of
 
 \bigskip
 
-A \textit{visual} way to formalize choreographies is through \textbf{Choreographic Automata} \cite{barbanerachoreography}, which describe a communication system using a set of finite-state automata. Representing choreographies using FSA is particularly well-suited for illustrating the program flow, as it clearly shows loops and branching, while using previously described results and notions. \cite{orlando2021corinne}. 
+A \textit{visual} way to formalize choreographies is through \textbf{Choreographic Automata} \cite{coordination2020-chorAuto}, which describe a communication system using a set of finite-state automata. Representing choreographies using FSA is particularly well-suited for illustrating the program flow, as it clearly shows loops and branching, while using previously described results and notions. \cite{orlando2021corinne}. 
 
 \bigskip
 The goal of this project is to build a tool that starting from an existing Erlang program extracts the choreographic specification in the form of Choreographic Automata. This  amounts to first extract the local views corresponding to each actor and then  combine the local views into the global choreography. This step  is a sort of inverse operation with respect to the projection and will not be always possible. To illustrate what it means to extract a choreography from an Erlang program, consider the following example.

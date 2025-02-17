@@ -1,9 +1,13 @@
-The impetus of service-oriented computing and, more recently, of microservices has determined a radical shift from monolithic applications to distributed components cooperating through message-passing.
-%
-In this domain, \emph{choreographic} coordination~\cite{WS-CDL} allows designers to focus on the so-called \emph{application-level protocols}, i.e., a description of the \emph{communication interactions}\footnote{%
-  With interaction, we refer to a full message-passing communication, comprised of both a send of a message and the corresponding receive.}  among the system's components (hereafter called
+The rise of service computing and microservices led to a shift from  
+monolithic apps to distributed components using message-passing.  
+%  
+In this field, \emph{choreographic} coordination~\cite{WS-CDL} lets  
+designers focus on \emph{application-level protocols}, i.e., a  
+description of \emph{communication interactions}\footnote{%  
+  An interaction is a full message-passing event, including both  
+  sending and receiving.} among system components (called  
 \emph{participants}).
-% 
+%
 This focus is typically expressed by two distinct, yet related views
 of distributed computations: the so-called \emph{global} and
 \emph{local} views.
@@ -15,7 +19,7 @@ protocol.
 The latter view provides the description of the communication
 behavior of participants in isolation and can guide their
 implementation.
-Choreographies can be expressed in modeling languages or formalisms
+Choreographies can be expressed in modeling languages or formalism
 (like WS-CDL~\cite{WS-CDL}, BPMN diagrams~\cite{BPMN}),
 multiparty session types~\cite{HondaYC16}, message-sequence charts,
 multiparty contracts, and many others (see also the survey

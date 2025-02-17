@@ -1,17 +1,47 @@
-Software industry is
-increasingly devoting attention to choreographic approaches
+In the industrial context, Erlang's actor model has also inspired other 
+programming languages or frameworks, such as Elixir \cite{website:elixir}, a 
+programming language based on Erlang's virtual machine. Other programming 
+languages also implement the actor model, such as Go \cite{website:golang} with 
+its GoRoutines (comparable to Erlang's spawns) and channels (similar to Erlang's
+send and receive).
+Software industry is increasingly devoting attention to choreographic approaches
 \cite{BPMN,bon18,fmmt20,DBLP:journals/software/AutiliIT15} because
 they naturally support modularization and decoupling.
 %
 In fact, distributed components coordinate according to a global
 description without the need of an explicit coordinator.
 %
+In the academic context, research in the field of \textit{choreography} focuses 
+on two main topics: \textit{choreography specification} and 
+\textit{choreographic programming}.
+\begin{itemize}
+    \item \textit{Choreography specifications}: this area includes formal 
+    methods, such as multiparty asynchronous session types 
+    \cite{honda2008multiparty}, which have been established to describe the 
+    interactive structure of a fixed number of actors from a global perspective.
+    These methods enable the syntactic verification of actors' correctness by 
+    projecting the global specification onto individual participants. 
+    Choreography specifications are also studied as contracts, which provide 
+    abstract descriptions of program behavior, known as \textit{multiparty 
+    contracts} \cite{zava}.
+    \item \textit{Choreographic programming}: this programming paradigm has been
+    explored both theoretically, as in \cite{website:wscdl}, and industrially, 
+    as in \cite{website:bpmn}. Several choreographic programming languages have
+    been designed and studied to support this paradigm \cite{montesi2010jolie, 
+    montesi2014choreographic, giallorenzo2020object, dalla2014aiocj}.
+\end{itemize}
 In this context, global specifications are crucial for guaranteeing
 correctness (since they are blueprints of complex distributed systems
 and feature model-driven development) as well as for program
-comprehension.
+comprehension. 
+Most formal works on communication protocol 
+specifications emphasize the projection of a global specification onto local 
+specifications. However, the process of choreography extraction remains 
+challenging and has been explored in \cite{cflm17}, with a general 
+framework for extracting choreographies presented in 
+\cite{cruz2022implementing}.
 %
-To the best of our knowledge, the first attempts to distil global
+To the best of our knowledge, the first attempts to extract global
 specifications for message-passing systems goes back
 to~\cite{myh09,lt12,lty15}.
 %
