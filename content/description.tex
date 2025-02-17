@@ -1,12 +1,11 @@
 \paragraph{How to use the tool}
-The tool can be used from the command line interface (CLI). It can be used by
-compiling each module from the Erlang Shell (Eshell) or, more conveniently, by
-using \texttt{rebar3}, a standard build tool that provides various features
+The easiest way to use the tool is from the command line interface (CLI)
+using the help of \texttt{rebar3}, a standard build tool that provides various features
 such as package management for community-created libraries, compilation, and
 automated project testing. By cloning the project from the public GitHub
 repository and running the \texttt{rebar3 escriptize} command in the main
 directory, \texttt{rebar3} will, in this order, check for and download
-dependencies if needed, compile the project, and run tests if present. After
+dependencies if needed, compile the project. After
 that, an executable can be used in \texttt{./\_build/default/bin/chorer}.
 
 \begin{lstlisting}[caption=Usage message]
@@ -41,82 +40,9 @@ Arguments:
     the local and global view files will be saved. Local views will be named
     \texttt{[function name with arity]\_local\_view.dot}, while the global view
     file will be named \texttt{[Entrypoint]\_global\_view.dot}.
-    \item \textbf{Options}: Currently, this is a tuple of two booleans that
-    allow customization of local views. The first boolean determines whether to
-    identify final states (by default, it is set to true). The second adds more
-    information to the local view by including transitions related to other
-    language constructs in addition to communication constructs (by default, it
-    is set to false). This parameter may be expanded in the future with
-    additional booleans.
-\end{itemize}
-
-\begin{lstlisting}[language=Erlang, caption=Use example of the tool]
-shell> ./_build/default/bin/chorer ./path/to/file.erl entrypoint/0
-...
-[INFO] Finished!
-\end{lstlisting}
-
-\paragraph{Tool structure}
-The project is divided into two main folders. Under the folder \texttt{examples},
-there are various examples of Erlang programs to test the tool. The tool's code
-is located in the \texttt{src} folder.
-
-\bigskip
-
-\dirtree{%
-.1 chorer.
-.2 examples.
-.3 ....
-.2 src.
-.3 choreography.
-.4 actor\_emul.erl.
-.4 eval.erl.
-.4 gv.erl.
-.4 lv.erl.
-.4 md.erl.
-.3 common.
-.4 common\_data.hrl.
-.4 db.erl.
-.4 digraph\_to\_dot.erl.
-.4 fsa.erl.
-.4 log.erl.
-.4 settings.erl.
-.4 share.erl.
-.3 chorer\_app.erl.
-.3 chorer.app.src.
-.2 rebar.config.
-.2 rebar.lock.
-}
-
-\bigskip
-
-The main file is \texttt{chorer\_app.erl}, which contains the \texttt{main}
-function. The file \texttt{rebar.config}, \texttt{rebar.lock}, and
-\texttt{chorer.app.src} are required for running the tool with \texttt{rebar3}.
-The \texttt{choreography} folder contains modules responsible for the static
-analysis of the program and the creation of local and global views. Specifically:
-
-\begin{itemize}  
-    \item \texttt{actor\_emul.erl}: manages the emulation of an actor during the
-    globalview creation.
-    \item \texttt{eval.erl}: helps the localview generation.  
-    \item \texttt{gv.erl}: generates the globalview.  
-    \item \texttt{lv.erl}: generates the localviews.  
-    \item \texttt{md.erl}: manages the extraction of preliminary data.  
-\end{itemize}  
-
-\noindent The \texttt{share} folder contains shared functions for all modules,
-including:  
-\begin{itemize}  
-  \item \texttt{common\_data.erl}: header file where the main data structures
-  are defined.  
-  \item \texttt{db.erl}: manages the common information used during the creation
-  of both local and global view.  
-  \item \texttt{digraph\_to\_dot.erl}: converts a graph into DOT format.  
-  \item \texttt{fsa.erl}: manages and minimizes automata.  
-  \item \texttt{log.erl}: manages the logging of messages.  
-  \item \texttt{settings.erl}: manages the settings of the program.  
-  \item \texttt{share.erl}: handles file saving and shared function.  
+    \item \textbf{Options}: other arguments are specific operation to perform
+    on the local view or the global view, i.e. produce in as output the
+    minimized version of a graph.
 \end{itemize}
 
 \subsubsection{From Erlang to Choreographies}
@@ -131,7 +57,7 @@ transitions, from which the evaluation of the local view will resume.
 The send operation (\texttt{Pid ! message}) operation corresponds to Figure \ref{grafo:send}.  
 The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.  
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={29mm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -143,7 +69,7 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
       \node[state] (n_7) [right of=n_4] {$m$};
       \node[state] (n_8) [below right of=n_5] {$m+1$};
       
-      \draw[->] (n_1) -- node[midway, above left, pos=0.6] {0\#receive message1} (n_2);
+      \draw[->] (n_1) -- node[midway, above left, pos=0.6] {0\#receive message0} (n_2);
       \draw[->] (n_1) -- node[midway, above, pos=0.5] {...} (n_3);
       \draw[->] (n_1) -- node[midway, below left, pos=0.6] {N\#receive messageN} (n_4);
       \draw[->] (n_2) -- node[midway, above, pos=0.5] {...} (n_5);
@@ -158,7 +84,7 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
 \end{figure}
 
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={50mm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -170,7 +96,7 @@ The \texttt{spawn} function call corresponds to Figure \ref{grafo:spawn}.
     \label{grafo:send}
 \end{figure}
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={40mm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -187,7 +113,7 @@ In the case of \textit{recursive} calls, a transition $\epsilon$ is created from
 node generated to the first node, as shown in Figure \ref{grafo:ricors}.
 For now, further evaluation of the function is blocked.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={3cm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -209,7 +135,7 @@ function with the last state created in the local view of the calling function, 
 them with an $\epsilon$ transition. The local view will continue from the last vertex of  
 the call graph.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={2cm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {$1_a$};
@@ -236,7 +162,7 @@ the left of the symbol, as shown in Figure \ref{grafo:globspawn}. A spawn will b
 directly inserted into the graph. Each process will also be numbered in case multiple  
 actors are created for the same function.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={7cm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -256,7 +182,7 @@ receiving process must match the data recipient, and the pattern matching of the
 \textit{receive} that are ``empty" (i.e., messages that are sent but not processed by a  
 \textit{receive} in any process) will not be shown in the global automaton.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[node distance={8cm}, thick, main/.style = {draw, circle}] 
       \node[state] (n_1) {1};
@@ -270,61 +196,55 @@ receiving process must match the data recipient, and the pattern matching of the
 
 
 \subsubsection{Main algorithms}
-\input{content/algorithms}
+\noindent The execution is divided into four main phases:
+\begin{enumerate}
+\item Initialization of the \texttt{db\_manager}, data structures, and
+extraction of preliminary information (handled by the
+\texttt{md.erl} module). Possible actors are extracted from
+the \texttt{export} attribute, the number of \texttt{spawn}
+executions is counted, and the ASTs of all functions are saved in
+the \texttt{db\_manager}. Meanwhile, an initial evaluation of the
+program flow is performed by initializing the names of actors and
+saving the argument passing to the \texttt{spawn} functions.
 
-\paragraph{Old state}
+\item Creation of local views for all possible actors, i.e., all functions
+that appear in the \texttt{export} at the beginning of a program
+(obtained from the first phase). This phase essentially acts as a compiler, 
+translating Erlang programs into local choreographies.
 
-The tool can accurately parse the main constructs and features of the Erlang 
-language. In Table \ref{erl}, we outline the current status: what is supported, 
-what is not supported, and what are the next objectives. It was decided not to 
-support certain constructs because they are not useful at this stage of the 
-project. For example, supporting error handling with try-catch is unnecessary 
-when variable passing is not yet implemented. Additionally, some constructs were
-excluded because they are orthogonal to others, such as complex data structures. 
-The tool generates a local view that closely aligns with the behavior of the 
-original actor, and the algorithm for combining local views into a global view
-performs well on simple examples. However, at present, it does not provide 
-automatic error detection for certain properties in the global choreography.
+\item Creation of the global view starting from the program's starting
+point and combining the local views created in phase two.
 
-% \begin{table}[!ht]
-%     \centering
-%     \begin{minipage}{0.49\textwidth}
-%     \centering
-%     \begin{tabular}{|c||c|}
-%     \hline \textbf{Keyword} & \textbf{Support}    \\  \hline
-%      atom & \cellcolor{ashgrey}yes    \\  \hline
-%      integer & \cellcolor{ashgrey}yes \\   \hline
-%      float &\cellcolor{ashgrey}yes    \\   \hline
-%      boolean &\cellcolor{ashgrey}yes    \\   \hline
-%      tuple & \cellcolor{ashgrey}yes    \\   \hline
-%      list &\cellcolor{ashgrey}yes    \\   \hline
-%      record & \cellcolor{red!50}no   \\   \hline
-%      map & \cellcolor{red!50}no   \\   \hline
-%      binary & \cellcolor{red!50}no    \\   \hline
-%      if & \cellcolor{ashgrey}yes    \\   \hline
-%      case & \cellcolor{ashgrey}yes    \\   \hline
-%      receive &\cellcolor{ashgrey}yes    \\   \hline
-%     \end{tabular}
-%     \end{minipage}
-%     \centering
-%     \begin{minipage}{0.49\textwidth}
-%     \begin{tabular}{|c||c|}
-%     \hline \textbf{Keyword} & \textbf{Support}    \\  \hline
-%      ! & \cellcolor{ashgrey}yes    \\   \hline
-%      assignment &\cellcolor{ashgrey}yes    \\   \hline
-%      function & \cellcolor{green!50}goal  \\   \hline
-%      recursion & \cellcolor{green!50}goal   \\   \hline
-%      hof &\cellcolor{green!50}goal    \\   \hline
-%      when & \cellcolor{red!50}no    \\   \hline
-%      self &\cellcolor{ashgrey}yes    \\   \hline
-%      spawn &\cellcolor{ashgrey}yes    \\   \hline
-%      rand:uniform &\cellcolor{ashgrey}yes    \\   \hline
-%      try catch & \cellcolor{red!50}no    \\   \hline
-%      after & \cellcolor{red!50}no    \\   \hline
-%      math operation &\cellcolor{red!50}no    \\   \hline
-%     \end{tabular} 
-%     \end{minipage}
-    
-%     \caption{Supported constructs: Keywords in gray are already supported, keywords in red are not supported and are unlikely to be supported soon. Constructs in green are related to functions, because parameter passing is not supported.}
-%     \label{erl}
-% \end{table}
+\item Post-processing of the local and global view, inferring information on the
+graph and extracting data useful for the benchmarks
+\end{enumerate}
+
+While creating a local view follows the function code line by line, the global  
+view must compose local views while considering the created actors. An  
+approximate execution is simulated from the startup function using the actor  
+philosophy. Each actor has a manager process that tracks available transitions  
+and the process state (i.e., local variables). This function provides the main  
+process of the global view with actor-related information. Messages may travel  
+within the same virtual machine or across a network, making message exchange  
+asynchronous. If two sends, $A$ and $B$, target the same process, their order  
+is unpredictable, altering the program flow.  
+
+The global view creation algorithm follows an overapproximation approach,  
+combining local views while dynamically creating communicating actors and  
+exchanging messages. It explores all possible executions by handling forks in  
+local views and evaluating message reception. A branch duplicates and takes  
+another path in three cases: encountering a fork in a local view, multiple  
+processes ready to receive, and evaluating message reception within a process.  
+This ensures a thorough exploration of execution paths.  
+
+The strategy for composing local views is to have all actors continue until  
+any \textit{receive} is encountered. While searching for the first \textit{receive},  
+\textit{spawn} and \textit{send} operations are also checked. If a \textit{spawn}  
+occurs, the node is added to the graph, and the actor is created. If a  
+\textit{send} occurs, the message is enqueued in the target process' message  
+queue. After blocking on a \textit{receive}, possible messages are processed,  
+creating a new execution path for each, adding new states to the global graph.  
+
+The algorithm runs recursively until a relevant state change occurs. When an  
+iteration fails to modify any actor's state, execution stops. The final graph  
+represents asynchronous communication among actors for messages exchanged.  

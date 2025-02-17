@@ -33,11 +33,11 @@ with an increased number of nodes and edges in the global view.
 Warnings usually occur when the
 tool encounters unknown elements in the source code, such as a new keyword or
 an external function. They also appear when the tool loses track of a process
-ID, preventing it from mapping message exchanges correctly. 
+identifier, preventing it from mapping message exchanges correctly. 
 This occurs in the \texttt{if-cases} example, which generates 185 warnings due to
-the tool's failure to instantiate a variable with the correct process ID, making
-it unable to deliver the corresponding message. This issue likely stems from a
-bug in the actor emulation module.
+the tool's failure to instantiate a variable with the correct process identifier,
+making it unable to deliver the corresponding message. This issue likely stems 
+from a bug in the actor emulation module.
 Errors typically arise when an unexpected situation occurs or when a deadlock
 state is detected. Most examples do not automatically terminate a process once
 it completes its task (e.g., waiting for requests), which contributes to this
@@ -51,9 +51,20 @@ significantly reduce these values. However, this conflicts with the principle
 of using an over-approximated approach. To address this, minimization could be
 added as a program argument, allowing users to trade some generality for a
 more precise global view graph.
+
+\paragraph{About complexity}
+A significant portion of the execution time is obviously consumed by the global  
+view composition algorithm. This algorithm attempts to explore all possible  
+program executions, considering every potential message order to meet the  
+overapproximation requirement. In the worst-case scenario, without any  
+restrictions, it must evaluate all permutations of messages, resulting in a  
+factorial time complexity of \( O(n!) \). However, in most cases, more efficient  
+strategies can be applied to mitigate this complexity.
 The execution times show that our algorithm performs efficiently even on large 
-examples, with the most complex cases (e.g., \texttt{foo8}) taking only a few 
-seconds.
+examples (an example is considered large when there are many nodes and edges
+because this corresponds to a high number of messages exchanged, leading to a
+high number of possible combination of these messages), with the most complex 
+cases (e.g., \texttt{foo8}) taking only a few seconds.
 
 \begin{table}[!ht]
 \centering
@@ -138,6 +149,3 @@ customer & False \\
 \caption{Global view correctness data}
 \label{tab:corrbench}
 \end{table}
-
-% fare riferimento alla tabella quando si nominano gli esemi
-% fare spiegare la tab della correttezza
