@@ -1,4 +1,44 @@
+The project began with the goal of creating a proof of concept, a prototype,  
+for this type of analyzer, which is quite unique in its field,
+having a bottom-up over-approximation approach leaning to mainstream
+programming languages.  
+A significant amount of effort and resources have been invested,  
+primarily in the tool's codebase and its design around examples and  
+use cases. Additionally, extensive discussions have taken place  
+regarding the high-level and general aspects of the tool.  
 
-% riassunto del progetto in generale
-% riassunto contribuzioni del progetto
-% parlare delle cose future
+The results of this prototype are promising, demonstrating that such  
+a tool is feasible and worth further exploration.  
+Knowing the state of the art, our focus during this phase has been on  
+high-level discussions and analysis, defining motivations,  
+requirements, and challenges surrounding the tool. At the same time,  
+we have introduced multiple improvements to the existing codebase to  
+refine its output.  
+
+Finally, efforts have been made to advance a formalization process,  
+highlighting what has been done well and what still needs  
+improvement. This has provided valuable insights into the tool’s  
+design and future directions.  
+
+The formalization process has just begun and will require further refinement  
+in the future. A new testing method for the tool has been introduced, but  
+additional effort is needed to generate correct global views. This is  
+crucial for properly assessing the tool's precision and could lead to  
+refinements in its existing components.  
+
+The formalization process has also highlighted the need to refactor the  
+local view component. A possible improvement is the addition of a parsing  
+module capable of reading local views from files (e.g., DOT format).  
+This enhancement would make the tool more general, removing its strict  
+dependency on Erlang programs. 
+With such a feature, developers could create a separate tool to translate  
+their preferred programming language into a local view, outputting it  
+as a DOT file. This file could then be provided as input to our tool  
+to compute the corresponding global specification, making it a more  
+versatile and widely applicable solution.  
+
+Another area for improvement is the minimization and post-processing  
+module. It can be expanded with better heuristics to generate clearer,  
+more structured, and easily interpretable graphs. Enhancing these  
+optimizations will improve readability and usability, making the tool’s  
+output more insightful and practical.

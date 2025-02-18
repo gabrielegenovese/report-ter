@@ -1,121 +1,172 @@
 To better understand how the parsing of a file and the creation of a localview 
-should work, we created an attributed grammar for a subset of the Erlang language.
-An attributed grammar extends a context-free grammar by associating attributes with 
-its symbols and defining semantic rules. Attributes can be \textit{synthesized} (computed 
-from child nodes) or \textit{inherited} (passed from parent nodes). These rules define how 
-information propagates through the parse tree. In the following attributed grammar, 
-we define the localview of Chorer's constructs.
+should work, we created an attributed grammar for a subset of the Erlang 
+language. An attributed grammar extends a context-free grammar by associating 
+attributes with its symbols and defining semantic rules. Attributes can be 
+\textit{synthesized} (computed from child nodes) or \textit{inherited}
+(passed from parent nodes). 
+The attribute part can be seen as a set of operations that the compiler  
+performs during its analysis. This serves two key purposes: it provides  
+a clear understanding of what the tool can parse from the programming  
+language, and it defines how information propagates through the parse  
+tree. This propagation helps identify the core data structures that  
+underpin the tool’s functionality.  
 
-\paragraph{Program}
+The following attributed grammar will be presented alongside comments  
+to provide insights into the tool’s behavior. First, we introduce the  
+grammar fragment, followed by the corresponding operations applied  
+to the local view data structure. These operations illustrate how the  
+tool processes and interprets parsed elements, highlighting its  
+internal mechanisms. 
+The \texttt{link} function is used to establish a logical connection  
+between two nodes. Its third argument defines the label of the transition.  
+If this argument is not provided, the transition is considered an  
+$\epsilon$-transition, representing an unlabeled connection. 
 
-$prog \to (funPattern)^+$
+\paragraph{Program} For simplicity, we consider an Erlang program as a set 
+of one or more functions, that can be called by the user. All the needed 
+function are within the program.
 
-A program doesn't have a local-view, no need to write attributes.
+\bigskip
 
-\paragraph{Function 
-}
-\paragraph{List}
+\noindent $prog \to (function)^+$
 
-$funList \to (funPattern)^+$
+A complete program does not have a local view, so there is no need  
+to define attributes.  
 
-We create only the local-views that we need.
+\paragraph{Function}  
+A function can have its own local view representation.  
+In Erlang, pattern matching allows multiple definitions,  
+so we must distinguish between the base case and the  
+pattern matching case. The base case is straightforward,  
+so we only present the pattern matching case.  
 
-\paragraph{Pattern}
+\bigskip
 
-Base case: $funPattern \to fun.$ (trivial)
+\noindent Base case: $function \to fun.$
 
-$funPattern \to fun_1;...;fun_N.$
+\noindent With multiple definitions: $function \to fun_1;...;fun_N.$
 
 \begin{verbatim}
-funPattern.nodes = new U fun1.nodes U ... U funN.nodes
-funPattern.edges = link(new,fun1.first) U ... U 
-                   link(new,funN.first) U 
-                   fun1.edges U ... U funN.edges
-funPattern.first = new
+function.nodes = new U fun1.nodes U ... U funN.nodes
+function.edges = link(new,fun1.first) U ... U 
+                 link(new,funN.first) U 
+                 fun1.edges U ... U funN.edges
+function.first = new
 \end{verbatim}
 
-\paragraph{Body}
+Each definition has its own local view representation, so we must link  
+each one to a new state. This state serves as the starting point of  
+the entire local view. The nodes consist of all other nodes, and  
+the same applies to the edges.  
 
-$fun \to Atom(X_1,...,X_n) \to Exprs$
+\paragraph{Function body}  
+The body of a function consists of a name (which is an atom),  
+a set of arguments (which may be empty), and a list of expressions.  
 
-Attributes:
+\bigskip
+
+\noindent $fun \to Atom(X_1,...,X_n) \to Exprs$
+
 \begin{verbatim}
-fun.nodes = new U Exprs.nodes
-fun.edges = Exprs.edges U link(new, E.first)
-fun.first = new
+fun.nodes = Exprs.nodes
+fun.edges = Exprs.edges
+fun.first = Exprs.first
 fun.last = Exprs.last
 fun.context = [ X1 -> Param[1], ..., Xn -> Param[n] ]
-fun.ret_var = E.ret_var
+fun.ret_var = Exprs.ret_var
 \end{verbatim}
 
-\texttt{Param} is taken as input (default to \texttt{ANYDATA})
+When encountering a function, we simply add its arguments to the context.  
+The \texttt{Param} is taken as input, with a default value of \texttt{ANYDATA}.  
+Additionally, we can perform semantic checks to verify the function’s  
+existence.  
 
-\paragraph{Expressions}
+\paragraph{Expressions}  
+A list of expressions can have one or more elements. The single-expression  
+case is straightforward, so its attributes are omitted.  
 
-\paragraph{Concatenation}
+\bigskip
 
-Base case: $Exprs \to expr$ (trivial)
+\noindent Base case: $Exprs \to expr$
 
-$Exprs \to expr,Exprs'$
+\noindent With multiple expression: $Exprs \to expr,Exprs'$
 
-Attributes:
 \begin{verbatim}
 Exprs.nodes = expr.nodes U Exprs'.nodes
 Exprs.edges = expr.edges 
               U Exprs'.edges 
-              U link(expr.last, Exprs'.first, epsilon)
+              U link(expr.last, Exprs'.first)
 Exprs.first = expr.first
 Exprs.last = Exprs'.last
 Exprs.context = expr.context U Exprs'.context
 Exprs.ret_var = Exprs'.ret_var
 \end{verbatim}
 
-\paragraph{Send}
+Expressions represent the lines of code in an Erlang program.  
+We cover only the essential ones (e.g., assignments, function calls)  
+and those related to communication.  
 
-$expr \to expr'\ \ !\ \ expr''$
+\paragraph{Send}   
+As mentioned earlier, a send should add a transition to the local graph.  
 
-Attributes:
+\bigskip
+
+\noindent $expr \to expr'\ \ !\ \ expr''$
+
 \begin{verbatim}
 expr.nodes = expr'.nodes U expr''.nodes U new1 U new2
 expr.edges = expr'.edges U expr''.edges
-             U link(expr''.last, new1, epsilon)
+             U link(expr''.last, new1)
              U link(new1, new2, expr'.ret_var 
-                + " ! " 
-                + expr''.ret_var)
+                  + " ! " 
+                  + expr''.ret_var)
 expr.first = expr'.first
 expr.last = new2
 expr.context = expr'.context U expr''.context
 expr.ret_var = expr''.ret_var
 \end{verbatim}
 
-Firstly evaluate the left-hand side expression, then the right hand side one. 
-Lastly insert the sends edge.
+In Erlang, both the left-hand side and right-hand side of an operation  
+can be expressions. First, the left-hand side expression is evaluated,  
+followed by the right-hand side. Finally, a send edge is inserted with  
+the corresponding variable as the label. The left-hand side must contain  
+a process identifier.  
 
-\paragraph{Receive}
+\paragraph{Receive}  
+Like for a send, a receive operation should add a transition to  
+the local graph for each matching pattern.  
 
-$expr \to receive patter_1 \to Exprs_1; ...; pattern_n \to Exprs_n end$
+\bigskip
 
-Attributes:
+\noindent $expr \to receive patter_1 \to Exprs_1; ...; pattern_n \to Exprs_n end$
+
 \begin{verbatim}
 expr.first = new1
 expr.last = new2
 expr.nodes = Exprs1.nodes U ... U Exprsn.nodes U new1 U new2
 expr.edges = Exprs1.edges U ... U Exprsn.edges
-             U link(new1, Exprs1.first, epsilon) 
+             U link(new1, Exprs1.first) 
              U ...
-             U link(new1, Exprsn.first, epsilon)
-             U link(Exprs1.last, new2, epsilon)
+             U link(new1, Exprsn.first)
+             U link(Exprs1.last, new2)
              U ...
              U link(Exprsn.last, new2, espilon)
-expr.ret_var = ANYDATA (overapprox)
-context?
 \end{verbatim}
 
-\paragraph{Spawn call}
+A \texttt{receive} operation can contain an entire block of code 
+that must be evaluated.  
+Its return data cannot be determined statically, as it varies depending  
+on the matching pattern during the global view phase. Additionally,  
+since the context is modified during global view simulation,  
+we leave these two attributes unchanged.  
 
-$expr \to spawn(Atom, Params)$
+\paragraph{Spawn call}  
+The same reasoning used before applies to the \texttt{spawn} function.  
 
-Attributes:
+\bigskip
+
+\noindent $expr \to spawn(Atom, Params)$
+
 \begin{verbatim}
 expr.nodes = new1 U new2
 expr.edges = link(new1, new2, "spawn Atom")
@@ -124,24 +175,40 @@ expr.last = new2
 expr.ret_var = newVar(type: pid, value: random) 
 \end{verbatim}
 
-\paragraph{Recursive call}
+The \texttt{spawn} function returns a new variable as output.  
+Its type should be \texttt{pid}, with no assigned name.  
+An additional logical identifier is included to differentiate  
+it during global view construction. The context is left untouched.
 
-$expr \to FunName(Params)$
+\paragraph{Recursive call}  
+Recursive calls must be considered, as they are fundamental  
+in functional languages like Erlang.  
 
-Attributes:
+\bigskip
+
+\noindent $expr \to FunName(Params)$
+
 \begin{verbatim}
 expr.edges = expr.edges U link(FunName.first, expr.last)
 expr.ret_var = null
 \end{verbatim}
 
-Use of inherited attributes
-Stop evaluation
+For recursive calls, the last added node must be linked to the first  
+node of the local view being created. Using the function name,  
+we can retrieve its previously created first node.  
+Since a single analysis cannot determine the function's return type,  
+we set the return variable to \texttt{null}. After evaluating the  
+recursive call, the analysis stops, allowing only tail-recursive  
+functions.  
 
-\paragraph{Generic function call} 
+\paragraph{Generic function call}  
+To complete the previous analysis, we define attributes for  
+standard function calls.  
 
-$expr \to Atom(Params)$
+\bigskip
 
-Attributes:
+\noindent $expr \to Atom(Params)$
+
 \begin{verbatim}
 G = get_localview(Atom, Param)
 expr.nodes = G.nodes
@@ -151,11 +218,20 @@ expr.last = G.last
 expr.ret_var = G.ret_var 
 \end{verbatim}
 
-\paragraph{Assignment}
+With \texttt{get\_localview}, we retrieve the necessary information  
+to complete the local view for a generic function call.  
 
-$expr \to pattern = expr'$
+\paragraph{Assignment}  
+Finally, assignments must be handled to support basic programs  
+with variables. Assignments in Erlang are peculiar as it has
+immutable variables: they behave  
+as pattern matching when a variable is already defined.
+Thus, semantic checks can be performed.  
 
-Attributes:
+\bigskip
+
+\noindent $expr \to pattern = expr'$
+
 \begin{verbatim}
 expr.nodes = expr'.nodes
 expr.edges = expr'.edges
@@ -163,3 +239,9 @@ expr.first = expr'.first
 expr.last = expr'.last
 expr.context = [pattern -> expr'.ret_var]
 \end{verbatim}
+
+The pattern should add the new variable to the context  
+with its assigned name.  
+
+\paragraph{Conclusion}
+%% TODO
