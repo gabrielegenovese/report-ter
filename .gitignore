@@ -12,6 +12,8 @@ main.aux
 main.fdb_latexmk
 main.fls
 main.out
+main.nav
+main.snm
 main.toc
 main.pdf
 indent.log

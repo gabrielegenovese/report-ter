@@ -4,6 +4,7 @@ language. An attributed grammar extends a context-free grammar by associating
 attributes with its symbols and defining semantic rules. Attributes can be 
 \textit{synthesized} (computed from child nodes) or \textit{inherited}
 (passed from parent nodes). 
+
 The attribute part can be seen as a set of operations that the compiler  
 performs during its analysis. This serves two key purposes: it provides  
 a clear understanding of what the tool can parse from the programming  
@@ -17,6 +18,7 @@ grammar fragment, followed by the corresponding operations applied
 to the local view data structure. These operations illustrate how the  
 tool processes and interprets parsed elements, highlighting its  
 internal mechanisms. 
+
 The \texttt{link} function is used to establish a logical connection  
 between two nodes. Its third argument defines the label of the transition.  
 If this argument is not provided, the transition is considered an  
@@ -29,6 +31,8 @@ function are within the program.
 \bigskip
 
 \noindent $prog \to (function)^+$
+
+\bigskip
 
 A complete program does not have a local view, so there is no need  
 to define attributes.  
@@ -178,7 +182,8 @@ expr.ret_var = newVar(type: pid, value: random)
 The \texttt{spawn} function returns a new variable as output.  
 Its type should be \texttt{pid}, with no assigned name.  
 An additional logical identifier is included to differentiate  
-it during global view construction. The context is left untouched.
+it during global view construction. The context is left untouched
+as it's not modified.
 
 \paragraph{Recursive call}  
 Recursive calls must be considered, as they are fundamental  
@@ -244,4 +249,23 @@ The pattern should add the new variable to the context
 with its assigned name.  
 
 \paragraph{Conclusion}
-%% TODO
+We defined the attributed grammar for the \texttt{localview} module of our tool.  
+This process highlighted the need for a \texttt{localview} with the following  
+attributes: \texttt{nodes} and \texttt{edges}, with labels to represent the  
+automaton; a \texttt{first} and \texttt{last} node to track entry and exit  
+points; and a \texttt{context} along with \texttt{ret\_var} for basic  
+variable management.
+Some of these attributes are already present in the current codebase,  
+but their handling differs, and additional arguments must be incorporated.  
+Thus, a refactoring process is required to align the implementation with  
+this attributed grammar.
+
+This technique is particularly powerful in our case. 
+For instance, a known issue with  
+mutual recursive functions can be effectively addressed by improving  
+context management inspired by the attributed grammar.
+Using this method extensively could be key to  
+efficiently representing \texttt{localviews}. 
+However, the refactoring process is extensive and time-consuming.  
+Therefore, it has been identified as a high-priority task for future work.  
+

@@ -3,6 +3,7 @@ generic and automated script (written in Python) to test the tool and extract
 relevant information about the tool and its output.
 Table~\ref{tab:gvbench} presents empirical data on the evaluation of various 
 examples processed by the tool. 
+
 The examples are primarily designed ad hoc to test specific aspects of the tool.
 They are not sourced from well-known Erlang suites, as the tool is still in an
 early stage and cannot yet parse most of them.
@@ -38,13 +39,16 @@ This occurs in the \texttt{if-cases} example, which generates 185 warnings due t
 the tool's failure to instantiate a variable with the correct process identifier,
 making it unable to deliver the corresponding message. This issue likely stems 
 from a bug in the actor emulation module.
+
 Errors typically arise when an unexpected situation occurs or when a deadlock
 state is detected. Most examples do not automatically terminate a process once
 it completes its task (e.g., waiting for requests), which contributes to this
 issue. However, one particularly notable case is \texttt{foo8}, which has 561
 nodes, 560 edges, and 191 errors. The reason lies in its heavy use of case
 constructs—some information is lost between the local and global views, leading
-the tool to explore every possible execution path. This results in a high number
+the tool to explore every possible execution path.
+
+This results in a high number
 of states, edges, and undefined deadlock conditions. 
 Using a minimized version of the local graph during actor emulation can
 significantly reduce these values. However, this conflicts with the principle
@@ -60,6 +64,7 @@ overapproximation requirement. In the worst-case scenario, without any
 restrictions, it must evaluate all permutations of messages, resulting in a  
 factorial time complexity of \( O(n!) \). However, in most cases, more efficient  
 strategies can be applied to mitigate this complexity.
+
 The execution times show that our algorithm performs efficiently even on large 
 examples (an example is considered large when there are many nodes and edges
 because this corresponds to a high number of messages exchanged, leading to a
@@ -123,6 +128,7 @@ global view matches its correct version. Since knowing the complete specificatio
 in advance is not trivial, we conducted tests on a few selected examples. 
 The correct versions of the graph can be seen as what we expect to be the final
 global view.
+
 Table~\ref{tab:corrbench} briefly shows the correctness of the global view. 
 The \textbf{Check} column indicates whether the global view 
 correctly represents the expected behavior. Some examples, such as 

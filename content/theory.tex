@@ -55,10 +55,17 @@ main() ->
     B = spawn(?MODULE, dummy2, []),
     register(d2, B).
 \end{lstlisting}
-\todo{codice da spiegare: meglio usare uno pseudocodice?}
 
-Listing \ref{code:async} shows to the described scenario in Erlang. Figures 
-\ref{local:main}, \ref{local:dummy1a} and \ref{local:dummy2a} depict the local
+Listing~\ref{code:async} shows the Erlang code representing the  
+described scenario. The \texttt{register} function is a built-in  
+feature that enables the global registration of a process identifier.  
+This allows the use of a defined atom to communicate with the  
+corresponding process.  
+In this example, \texttt{register} is used to simplify communication,  
+eliminating the need to exchange process identifiers between processes.  
+However, this approach is included solely for demonstration purposes,  
+as it is generally not considered good practice in Erlang programs.
+Figures \ref{local:main}, \ref{local:dummy1a} and \ref{local:dummy2a} depict the local
 views of the actors.
 
 \begin{figure}[!ht]
