@@ -120,6 +120,7 @@ As mentioned earlier, a send should add a transition to the local graph.
 \begin{verbatim}
 expr.nodes = expr'.nodes U expr''.nodes U new1 U new2
 expr.edges = expr'.edges U expr''.edges
+             U link(expr'.last, expr''.first)
              U link(expr''.last, new1)
              U link(new1, new2, expr'.ret_var 
                   + " ! " 
