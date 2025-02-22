@@ -44,3 +44,38 @@ microservices architectures).
 The classical top-down approach is then of little help: one needs to
 write a global description of the desired behavior and then use type
 checking or monitoring to find possible discrepancies.
+
+Instead, we aimed to explore the concept of a \textit{bottom-up approach}.  
+Bottom-up methods (such as \cite{myh09,lt12,lty15,cflm17,cms18}) focus on  
+"extracting" global views from existing code. This is particularly useful  
+when no pre-existing global description is available or when the code has  
+been modified without keeping the choreography up to date for legacy reasons.  
+
+Moreover, automatic derivation of choreographies can aid developers in  
+understanding the system's behavior. The extracted choreography should  
+\textit{at least capture all the correct behaviors} of the system while also  
+\textit{highlighting potential misbehavior}. Indeed, our primary motivation  
+for extracting a choreographic description is to support \textit{debugging}  
+and \textit{program comprehension}. Therefore, the extracted choreography  
+should explicitly flag communication issues such as deadlocks, orphan  
+messages, and unspecified receptions.  
+
+This approach naturally applies to languages with a well-defined concurrency  
+model and dedicated message-passing primitives, such as Erlang, Go, and Scala.  
+
+In this context, I contributed to enhancing the development of an existing  
+tool called Chorer, a static analyzer that extracts choreography automata  
+from Erlang source code. This type of analysis presents two main challenges.  
+First, obtaining a perfect global specification from code is generally  
+impossible, as it would require solving undecidable problems such as program  
+termination. Thus, our goal is to extract an \textit{approximation} of the  
+system. An \textit{over-approximation} ensures that all correct behaviors are  
+included, while also capturing possible misbehavior.  
+
+The second challenge is the potential generation of \textit{huge choreographic  
+descriptions}. Large automata are difficult to interpret, making it necessary  
+to explore strategies for mitigating this issue.  
+
+My contributions to this work include formalizing parts of the tool, improving  
+the codebase through new features and bug fixes, and creating a benchmark suite  
+to evaluate the effectiveness of the approach.

@@ -1,4 +1,16 @@
-To better understand how the parsing of a file and the creation of a localview 
+At the beginning of this period, it was challenging to clearly define the role
+of the parser. There was no formal specification outlining how the tool should
+process a program during its initial analysis. This lack of clarity led to
+difficulties in understanding the expected behavior and designing a structured
+approach for parsing.
+To address this, we first examined the tool's existing implementation and
+identified key areas requiring specification. Establishing a well-defined set
+of rules became essential for ensuring consistent behavior and improving the
+accuracy of the parsing process. Through iterative refinement, we aimed to
+create a structured framework that guides the tool in extracting meaningful
+information from the program.
+Therefore, to better
+understand how the parsing of a file and the creation of a localview 
 should work, we created an attributed grammar for a subset of the Erlang 
 language. An attributed grammar extends a context-free grammar by associating 
 attributes with its symbols and defining semantic rules. Attributes can be 

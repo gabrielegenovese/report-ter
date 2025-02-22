@@ -1,5 +1,6 @@
 The project began with the goal of creating a proof of concept, a prototype,  
-for this type of analyzer, which is quite unique in its field,
+for an analyzer that could extract choreography automata directly
+from an existing codebase, which is quite unique in its field,
 having a bottom-up over-approximation approach leaning to mainstream
 programming languages.  
 A significant amount of effort and resources have been invested,  
@@ -9,8 +10,7 @@ regarding the high-level and general aspects of the tool.
 
 The results of this prototype are promising, demonstrating that such  
 a tool is feasible and worth further exploration.  
-Knowing the state of the art, our focus during this phase has been on  
-high-level discussions and analysis, defining motivations,  
+We discussed on how the analysis should work, defining motivations,  
 requirements, and challenges surrounding the tool. At the same time,  
 we have introduced multiple improvements to the existing codebase to  
 refine its output.  
@@ -42,10 +42,3 @@ module. It can be expanded with better heuristics to generate clearer,
 more structured, and easily interpretable graphs. Enhancing these  
 optimizations will improve readability and usability, making the tool’s  
 output more insightful and practical.
-
-New techniques can be explored to introduce generalization and optimization  
-into the tool. One such technique is \textit{abstract interpretation}  
-\cite{cousot1977abstract}, which allows for the generalization of data  
-during the analysis process. This approach can enhance the tool’s  
-ability to handle complex scenarios more efficiently, providing  
-a more scalable solution for different program structures.  
