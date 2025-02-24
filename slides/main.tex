@@ -52,7 +52,7 @@
     \item Usually choreography specification are with a \textit{top-down approach}
 \end{itemize}
 \begin{center}
-\includegraphics[width=0.9\textwidth]{images/dissys.png}
+\includegraphics[width=0.8\textwidth]{images/crop.png}
 \end{center}
 \end{frame}
 
@@ -72,23 +72,23 @@
 
 \begin{frame}[fragile]{Case study - Dining philosophers}
 Erlang pseudocode:
-\begin{verbatim}
-philosopher(Fork1, Fork2) ->
-    send req to Fork1,
-    receive ack from Fork1,
-    send req to Fork2,
-    receive ack from Fork2,
-    eat(),
-    send release to Fork1,
-    send release to Fork2,
-    philosopher(Fork1, Fork2).
+\begin{lstlisting}
+    philosopher(Fork1, Fork2) ->
+        send req to Fork1,
+        receive ack from Fork1,
+        send req to Fork2,
+        receive ack from Fork2,
+        eat(),
+        send release to Fork1,
+        send release to Fork2,
+        philosopher(Fork1, Fork2).
 
-fork() ->
-    receive req from Phil,
-    send ack to Phil,
-    receive release from Phil,
-    fork().
-\end{verbatim}
+    fork() ->
+        receive req from Phil,
+        send ack to Phil,
+        receive release from Phil,
+        fork().
+\end{lstlisting}
 \end{frame}
 
 
