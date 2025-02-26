@@ -22,12 +22,15 @@
 
 \frame{\titlepage}
 
+% aim
+%
+
 % \begin{frame}{Overview}
 % \tableofcontents
 % \end{frame}
 
 % This project focuses on the development of distributed systems, particularly on  
-% how to assist developers in designing and debugging protocols.  
+% how to assist developers in designing and debugging communication protocols.  
 % A distributed system consists of multiple participants collaborating toward a  
 % common goal. These participants communicate over a channel, which is often  
 % asynchronous.  
@@ -45,9 +48,9 @@
 \begin{frame}{Introduction}
 \begin{itemize}
     \item Aim: explore formal model for development of 
-    distributed apps
+    distributed application for protocol specification
     \item Motivations: \textit{debugging}, verification of 
-    concurrency models (\textit{deadlock}, \textit{liveness}, etc...), 
+    concurrent models (\textit{deadlock}, \textit{liveness}, etc...), 
     \textit{program understanding}
     \item Usually choreography specification are with a \textit{top-down approach}
 \end{itemize}
@@ -56,51 +59,72 @@
 \end{center}
 \end{frame}
 
-
 \begin{frame}{Brief introduction to Choreography Automata}
 
 \begin{itemize}
-    \item Chorer: prototype for a static analyzer that extract Choreography 
-    Automata from Erlang source code
+    \item Choreography: a formal model for distributed systems used
+    for protocol specification
     \bigskip
-    \item Choreography: a formal abstract model for distributed systems
+    \item Local view: point of view of a single participant
     \bigskip
-    \item Choreography Automata: a graphical way of expressing Choreography,
-    through LTS
+    \item Global view: communication system seen from above
+    \bigskip
+    \item Choreography Automata: a graphical way of expressing Choreography
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Case study - Dining philosophers}
-Erlang pseudocode:
-\begin{lstlisting}
-    philosopher(Fork1, Fork2) ->
-        send req to Fork1,
-        receive ack from Fork1,
-        send req to Fork2,
-        receive ack from Fork2,
-        eat(),
-        send release to Fork1,
-        send release to Fork2,
-        philosopher(Fork1, Fork2).
+%% motivations
 
-    fork() ->
-        receive req from Phil,
-        send ack to Phil,
-        receive release from Phil,
-        fork().
-\end{lstlisting}
+\begin{frame}{Case study: Dining philosopher}
+\begin{itemize}
+    \item ! : send
+    \item ? : receive
+\end{itemize}
+
+    \begin{figure}[ht]
+    \centering
+    % \makebox[\textwidth][c]{
+    \resizebox{0.8\textwidth}{!}{%
+        \begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
+            \node[state] (n_1) {1};
+            \node[state] (n_2) [right of=n_1] {2};
+            \node[state] (n_3) [right of=n_2] {3};
+            
+            \draw[->] (n_1) -- node[midway, above, pos=0.5] {fork\{0,1\} ! req} (n_2);
+            \draw[->] (n_2) -- node[midway, above, pos=0.5] {receive ack} (n_3);
+            \draw[->] (n_3) to [out=150,in=30]  node[midway, above, pos=0.5] {fork\{0,1\} ! release} (n_1);
+        \end{tikzpicture}
+        }
+    % }%
+    \caption{Local view of a philosopher.}
+    \label{graph:philolocal}
+    \end{figure}
+    \begin{figure}[ht]
+    \centering
+    % \makebox[\textwidth][c]{
+    \resizebox{0.8\textwidth}{!}{%
+    \begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
+        \node[state] (n_1) {1};
+        \node[state] (n_2) [right of=n_1] {2};
+        \node[state] (n_3) [right of=n_2] {3};
+        
+        \draw[->] (n_1) -- node[midway, above, pos=0.5] {receive req} (n_2);
+        \draw[->] (n_2) -- node[midway, above, pos=0.5] {Philo ! ack} (n_3);
+        \draw[->] (n_3) to [out=160,in=20] node[midway, above, pos=0.5] {receive release} (n_1);
+    \end{tikzpicture}
+    }
+    % }%
+    \caption{Local view of a fork.}
+    \label{graph:forklocal}2
+    \end{figure}
 \end{frame}
 
-
 \begin{frame}{Global view example}
-\textbf{World} point of view of the communication system
-
-\bigskip
 
 \begin{figure}[t]
 \centering
 % \makebox[\textwidth][c]{
-\resizebox{0.9\textwidth}{!}{%
+\resizebox{\textwidth}{!}{%
     \begin{tikzpicture}[node distance={40mm}, thick, main/.style = {draw, circle}] 
         \node[state] (n_1) {1};
         \node[state] (n_2) [below right of=n_1] {2};
@@ -126,69 +150,21 @@ Erlang pseudocode:
 \end{frame}
 
 
-
-\begin{frame}{Local view example}
-% mettere in piccolo gv in alto a destra
-The point of view of a \textbf{single} actor
-
-\bigskip
-
-\begin{figure}[t]
-\centering
-% \makebox[\textwidth][c]{
-\resizebox{0.8\textwidth}{!}{%
-    \begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
-        \node[state] (n_1) {1};
-        \node[state] (n_2) [right of=n_1] {2};
-        \node[state,accepting] (n_3) [right of=n_2] {3};
-        
-        \draw[->] (n_1) -- node[midway, above, pos=0.5] {fork\{0,1\} ! req} (n_2);
-        \draw[->] (n_2) -- node[midway, above, pos=0.5] {fork\{0,1\} ! release} (n_3);
-    \end{tikzpicture}
-    }
-% }%
-\caption{Local view of a philosopher.}
-\label{graph:philolocal}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-% \makebox[\textwidth][c]{
-\resizebox{0.8\textwidth}{!}{%
-\begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
-    \node[state] (n_1) {1};
-    \node[state] (n_2) [right of=n_1] {2};
-    \node[state,accepting] (n_3) [right of=n_2] {3};
-    
-    \draw[->] (n_1) -- node[midway, above, pos=0.5] {receive req} (n_2);
-    \draw[->] (n_2) -- node[midway, above, pos=0.5] {receive release} (n_3);
-\end{tikzpicture}
-}
-% }%
-\caption{Local view of a fork.}
-\label{graph:forklocal}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Requirements and challenges}
+\begin{frame}{Characteristics and challenges}
 Requirements:
 \begin{itemize}
     \item Automatic \textbf{bottom-up}, \textbf{over-approximated} approach
+    \bigskip
     \item Always capture the good behaviors, and highlight possible misbehavior
+    \bigskip
     \item Applicable to mainstream languages
-\end{itemize}
-\bigskip
-Challenges:
-\begin{itemize}
-    \item Undecidability
-    \item Huge descriptions
 \end{itemize}
 \end{frame}
 
 \section{Chorer}
 \begin{frame}{Chorer}
 Proof of Concept for a static analyzer
-developed as part of a Bachelor’s thesis at the University of Bologna.
+developed as part of my Bachelor’s thesis at the University of Bologna.
 Old state:
 \bigskip
 \begin{itemize}
@@ -197,8 +173,6 @@ Old state:
     \item Some important feature missing
     \bigskip
     \item Very difficult to use and understand
-    \bigskip
-    \item No focus on formalization
 \end{itemize}
 \end{frame}
 
@@ -215,6 +189,8 @@ Old state:
 
 \begin{frame}{Attributed grammar}
 \begin{itemize}
+    \item Aim: generalize some aspect of the tool
+    \bigskip
     \item Formal grammar enriched with attributes assigned to symbols 
     that define how these attributes are computed.
     \bigskip
@@ -224,26 +200,21 @@ Old state:
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Attributed grammar - Example}
-% aggiungi slide su storia del tool e focus sugli attributi
-$expr \to expr'\ \ !\ \ expr''$
-\begin{center}
-    \begin{verbatim}
-    expr.nodes = expr'.nodes U expr''.nodes U new1 U new2
-    expr.edges = expr'.edges U expr''.edges
-        U link(expr'.last, expr''.first)
-        U link(expr''.last, new1)
-        U link(new1, new2, expr'.ret_var 
-            + " ! " 
-            + expr''.ret_var)
-    expr.first = expr'.first
-    expr.last = new2
-    expr.context = expr'.context U expr''.context
-    expr.ret_var = expr''.ret_var
-\end{verbatim}
-\end{center}
+
+% parlare del bottom up e degli attributi
+\begin{frame}[fragile]{Attributes}
+Bottom-up technique. Attributes found:
+\bigskip
+\begin{itemize}
+    \item Nodes and Edges with Labels: used to show the automata
+    \bigskip
+    \item First and Last Node of the automata: used to link some production 
+    \bigskip
+    \item Context and Returned Variable: used to manage process identifiers and data in general
+\end{itemize}
 \end{frame}
 
+% Thanks to the attributed grammar, new feature where developed
 
 \begin{frame}{Improvements}
 Feature:
@@ -259,9 +230,6 @@ Feature:
     \item Some important bugs fixed
 \end{itemize}
 \end{frame}
-
-% scrivere che sono stati fatti da me
-% mettere sample della tabella con casi più interessanti
 
 \begin{frame}{Benchmarks - Empirical data}
 \begin{itemize}
@@ -279,10 +247,10 @@ Example & Tot LV & GV Nodes & GV Edges & Warns & Errors & Time \\
 async & 3 & 7 & 6 & 0 & 0 & 0.194s \\ 
 dining & 3 & 45 & 72 & 0 & 2 & 0.232s \\ 
 account & 3 & 28 & 39 & 0 & 2 & 0.211s \\ 
-if-cases & 4 & 148 & 210 & 185 & 30 & 0.525s \\ 
+if-cases & 4 & 148 & 210 & \textbf{185} & 30 & 0.525s \\ 
 foo6 & 5 & 9 & 9 & 15 & 2 & 0.190s \\ 
 foo7 & 3 & 149 & 229 & 0 & 6 & 0.513s \\ 
-foo8 & 5 & 561 & 560 & 0 & 191 & 3.590s \\ 
+foo8 & 5 & \textbf{561} & \textbf{560} & 0 & \textbf{191} & \textbf{3.590s} \\ 
 \hline
 \end{tabular}
 \caption{Global view empirical data}
@@ -290,8 +258,16 @@ foo8 & 5 & 561 & 560 & 0 & 191 & 3.590s \\
 \end{table}
 \end{frame}
 
+% dire più informazioni su stati, warning e errori
+
 \begin{frame}{Benchmarks - Correctness}
-Set ground for a precision benchmark:
+Set ground for a precision benchmark (a correct version of the 
+global view must be present):
+\begin{itemize}
+    \item True: the global view given in output is the same of its
+    correct version
+    \item False: there are some difference
+\end{itemize}
 
 \begin{table}[!ht]
 \centering
@@ -310,7 +286,6 @@ customer & False \\
 \label{tab:corrbench}
 \end{table}
 \end{frame}
-
 
 \section{Conclusion}
 \begin{frame}{Conclusion}
