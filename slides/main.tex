@@ -49,14 +49,26 @@
 \begin{itemize}
     \item Aim: explore formal model for development of 
     distributed application for protocol specification
-    \item Motivations: \textit{debugging}, verification of 
-    concurrent models (\textit{deadlock}, \textit{liveness}, etc...), 
-    \textit{program understanding}
-    \item Usually choreography specification are with a \textit{top-down approach}
 \end{itemize}
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/crop.png}
 \end{center}
+\end{frame}
+
+\begin{frame}{Context}
+\begin{itemize}
+    \item Distributed system: set of participants collaborating for a  
+    common goal
+    \bigskip
+    \item Asynchronous communication channel
+    \bigskip
+    \item Programming with the actor model (Erlang)
+    \bigskip
+    \item Send and receive main operations
+    \bigskip
+    \item Protocols usually designed with \textit{top-down approach} 
+\end{itemize}
+    
 \end{frame}
 
 \begin{frame}{Brief introduction to Choreography Automata}
@@ -65,57 +77,69 @@
     \item Choreography: a formal model for distributed systems used
     for protocol specification
     \bigskip
-    \item Local view: point of view of a single participant
-    \bigskip
     \item Global view: communication system seen from above
+    \bigskip
+    \item Local view: point of view of a single participant
     \bigskip
     \item Choreography Automata: a graphical way of expressing Choreography
 \end{itemize}
 \end{frame}
 
-%% motivations
+\begin{frame}{Motivations}
+\begin{itemize}
+    \item \textit{Debugging}, \textit{verification} of 
+    concurrent properties (\textit{deadlock}, \textit{liveness}, etc...), 
+    \textit{program understanding}
+    \bigskip
+    \item Bottom-up approach like the one used in programming
+    \bigskip
+    \item Chorer: a prototype for a static analyzer that extract Choreography Automata
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{Case study: Dining philosopher}
 \begin{itemize}
     \item ! : send
     \item ? : receive
 \end{itemize}
-
     \begin{figure}[ht]
     \centering
     % \makebox[\textwidth][c]{
-    \resizebox{0.8\textwidth}{!}{%
-        \begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
-            \node[state] (n_1) {1};
-            \node[state] (n_2) [right of=n_1] {2};
-            \node[state] (n_3) [right of=n_2] {3};
-            
-            \draw[->] (n_1) -- node[midway, above, pos=0.5] {fork\{0,1\} ! req} (n_2);
-            \draw[->] (n_2) -- node[midway, above, pos=0.5] {receive ack} (n_3);
-            \draw[->] (n_3) to [out=150,in=30]  node[midway, above, pos=0.5] {fork\{0,1\} ! release} (n_1);
-        \end{tikzpicture}
-        }
-    % }%
-    \caption{Local view of a philosopher.}
-    \label{graph:philolocal}
-    \end{figure}
-    \begin{figure}[ht]
-    \centering
-    % \makebox[\textwidth][c]{
-    \resizebox{0.8\textwidth}{!}{%
+    \resizebox{0.7\textwidth}{!}{%
     \begin{tikzpicture}[node distance={45mm}, thick, main/.style = {draw, circle}] 
         \node[state] (n_1) {1};
         \node[state] (n_2) [right of=n_1] {2};
         \node[state] (n_3) [right of=n_2] {3};
         
-        \draw[->] (n_1) -- node[midway, above, pos=0.5] {receive req} (n_2);
+        \draw[->] (n_1) -- node[midway, above, pos=0.5] {? req} (n_2);
         \draw[->] (n_2) -- node[midway, above, pos=0.5] {Philo ! ack} (n_3);
-        \draw[->] (n_3) to [out=160,in=20] node[midway, above, pos=0.5] {receive release} (n_1);
+        \draw[->] (n_3) to [out=160,in=20] node[midway, above, pos=0.5] {? release from Philo} (n_1);
     \end{tikzpicture}
     }
     % }%
     \caption{Local view of a fork.}
-    \label{graph:forklocal}2
+    \label{graph:forklocal}
+    \end{figure}
+    \begin{figure}[ht]
+    \centering
+    % \makebox[\textwidth][c]{
+    \resizebox{0.9\textwidth}{!}{%
+        \begin{tikzpicture}[node distance={40mm}, thick, main/.style = {draw, circle}] 
+            \node[state] (n_1) {1};
+            \node[state] (n_2) [right of=n_1] {2};
+            \node[state] (n_3) [right of=n_2] {3};
+            \node[state] (n_4) [right of=n_3] {6};
+            
+            \draw[->] (n_1) -- node[midway, above, pos=0.5] {fork0 ! req} (n_2);
+            \draw[->] (n_2) -- node[midway, above, pos=0.5] {? ack from fork0} (n_3);
+            \draw[->] (n_3) -- node[midway, above, pos=0.5] {...} (n_4);
+            \draw[->] (n_4) to [out=155,in=25]  node[midway, above, pos=0.5] {fork1 ! release} (n_1);
+        \end{tikzpicture}
+        }
+    % }%
+    \caption{Local view of a philosopher.}
+    \label{graph:philolocal}
     \end{figure}
 \end{frame}
 
@@ -150,10 +174,11 @@
 \end{frame}
 
 
-\begin{frame}{Characteristics and challenges}
-Requirements:
+\begin{frame}{Characteristics of the tool}
 \begin{itemize}
-    \item Automatic \textbf{bottom-up}, \textbf{over-approximated} approach
+    \item Automatic \textbf{bottom-up} extraction
+    \bigskip
+    \item \textbf{Over-approximated} approach when computing the globalview
     \bigskip
     \item Always capture the good behaviors, and highlight possible misbehavior
     \bigskip
@@ -170,7 +195,7 @@ Old state:
 \begin{itemize}
     \item Few working examples and no case study
     \bigskip
-    \item Some important feature missing
+    \item Some important feature missing (basic use of functions)
     \bigskip
     \item Very difficult to use and understand
 \end{itemize}
@@ -308,7 +333,7 @@ Key contributions:
     \bigskip
     \item Extend correctness benchmarks
     \bigskip
-    \item Continue feature and bug fix process
+    \item Continue feature (new keyword or BIF) and bug fix process
 \end{itemize}
 \end{frame}
 
